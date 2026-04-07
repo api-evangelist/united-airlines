@@ -1,7 +1,12 @@
 aid: united-airlines
-url: https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml
+url: 
+  https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml
 modified: '2026-03-21'
 apis: []
 common:
   - type: Website
     url: https://www.united-airlines.com
+description: >-
+  United Airlines is a major American airline that operates a large domestic and international
+  route network, with hubs in Chicago, Denver, Houston, Los Angeles, New York, San
+  Francisco, and Washington.
