@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-schema/united-airlines-flight-status-schema.json",
+  "title": "United Airlines Flight Status",
+  "description": "Schema representing the real-time status of a United Airlines flight.",
+  "type": "object",
+  "properties": {
+    "flightNumber": {
+      "type": "string",
+      "description": "United Airlines flight number",
+      "examples": ["UA523"]
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Scheduled flight date"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["OnTime", "Delayed", "Cancelled", "Diverted", "Landed"],
+      "description": "Current flight status"
+    },
+    "origin": {
+      "type": "string",
+      "description": "IATA origin airport code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "destination": {
+      "type": "string",
+      "description": "IATA destination airport code",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "scheduledDeparture": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Originally scheduled departure time"
+    },
+    "estimatedDeparture": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current estimated departure time"
+    },
+    "actualDeparture": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Actual departure time (null if not yet departed)"
+    },
+    "scheduledArrival": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Originally scheduled arrival time"
+    },
+    "estimatedArrival": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Current estimated arrival time"
+    },
+    "actualArrival": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "Actual arrival time (null if not yet arrived)"
+    },
+    "departureGate": {
+      "type": "string",
+      "description": "Departure gate assignment"
+    },
+    "arrivalGate": {
+      "type": "string",
+      "description": "Arrival gate assignment"
+    },
+    "delayMinutes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current delay in minutes (0 if on time)"
+    }
+  },
+  "required": ["flightNumber", "date", "status", "origin", "destination"]
+}

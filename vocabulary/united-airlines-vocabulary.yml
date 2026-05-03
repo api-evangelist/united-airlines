@@ -1,0 +1,127 @@
+vocabulary:
+  name: United Airlines API Vocabulary
+  description: Domain vocabulary and taxonomy for United Airlines NDC API covering flight operations, booking, loyalty, and travel management.
+  version: 1.0.0
+  created: '2026-05-03'
+  modified: '2026-05-03'
+
+terms:
+  - term: NDC
+    label: New Distribution Capability
+    definition: IATA standard (21.3) for airline content distribution enabling direct booking of rich content including ancillaries, bundles, and dynamic pricing.
+    domain: Distribution
+    related: [EDIFACT, GDS, Aggregator]
+
+  - term: PNR
+    label: Passenger Name Record
+    definition: A unique record in an airline's reservation system identifying a booking. Represented by a 6-character record locator (e.g., ABCDEF).
+    domain: Booking
+    related: [Booking, RecordLocator]
+
+  - term: RecordLocator
+    label: Record Locator
+    definition: A 6-character alphanumeric code used to retrieve a booking. Also called a confirmation code or PNR locator.
+    domain: Booking
+    related: [PNR, Booking]
+
+  - term: ContinuousPricing
+    label: Continuous Pricing
+    definition: Dynamic pricing model where fares are determined algorithmically rather than from a fixed set of fare buckets, enabling real-time price optimization.
+    domain: Pricing
+    related: [FlightOffer, FareClass]
+
+  - term: FareClass
+    label: Fare Class
+    definition: A single letter code (e.g., Y, B, V, N) indicating the booking class for inventory management and frequent flyer accrual purposes.
+    domain: Pricing
+    related: [FareType, ContinuousPricing]
+
+  - term: FareType
+    label: Fare Type
+    definition: The commercial cabin and product level of a fare (Basic Economy, Economy, Premium Economy, Business/Polaris, First).
+    domain: Pricing
+    values: [BasicEconomy, Economy, PremiumEconomy, Business, First]
+
+  - term: BasicEconomy
+    label: Basic Economy
+    definition: United's most restrictive economy fare product with limited seat selection, no flight changes, and reduced MileagePlus accrual. Not eligible for hold bookings.
+    domain: Products
+
+  - term: AncillaryService
+    label: Ancillary Service
+    definition: Optional add-on services beyond the base airfare such as checked bags, seat upgrades, Economy Plus seat selection, travel insurance, and lounge access.
+    domain: Products
+    related: [Bundle]
+
+  - term: Bundle
+    label: Dynamic Bundle
+    definition: A combination of ancillary services offered at a package price. United offers 30+ dynamic bundle combinations.
+    domain: Products
+    related: [AncillaryService]
+
+  - term: HoldBooking
+    label: Hold Booking
+    definition: A reservation created without immediate payment, holding the fare for a set period (fare-dependent). Allows time to complete payment or gather traveler details.
+    domain: Booking
+
+  - term: MileagePlus
+    label: MileagePlus
+    definition: United Airlines frequent flyer loyalty program. Members earn miles for flights and partner purchases, redeemable for award travel and upgrades.
+    domain: Loyalty
+    related: [Passenger]
+
+  - term: OperationalDisruption
+    label: Operational Disruption
+    definition: A flight schedule irregularity caused by weather, mechanical issues, or ATC. Triggers automatic waiver application for changes or cancellations.
+    domain: Servicing
+
+  - term: Exchange
+    label: Booking Exchange
+    definition: A post-purchase modification to change one or more flight segments in an existing booking. Subject to fare rules and exchange fees.
+    domain: Servicing
+    related: [Refund, Cancellation]
+
+  - term: IATA
+    label: International Air Transport Association
+    definition: Global airline trade association setting industry standards including NDC, EDIFACT, and fare construction rules.
+    domain: Standards
+
+  - term: GDS
+    label: Global Distribution System
+    definition: Technology platform (e.g., Sabre, Amadeus, Travelport) used by travel agencies to search and book airline content. United content is available via NDC-enabled GDS.
+    domain: Distribution
+
+  - term: Aggregator
+    label: NDC Aggregator
+    definition: A technology company that builds NDC connections to multiple airlines and exposes the combined content to agencies. Requires less IT investment than direct connect.
+    domain: Distribution
+
+  - term: ScheduleChange
+    label: Schedule Change
+    definition: An airline-initiated modification to flight times, equipment, or routing. United sends schedule change alerts via API when changes affect existing reservations.
+    domain: Operations
+
+  - term: IATA Airport Code
+    label: IATA Airport Code
+    definition: A 3-letter code assigned by IATA to identify airports (e.g., ORD = Chicago O'Hare, LAX = Los Angeles International).
+    domain: Geography
+
+  - term: Polaris
+    label: Polaris Business Class
+    definition: United Airlines' premium business class product featuring flat-bed seats, Polaris Lounge access, and premium dining.
+    domain: Products
+
+  - term: EconomyPlus
+    label: Economy Plus
+    definition: United Airlines' extra-legroom economy seating product available as an ancillary purchase or included with premium membership.
+    domain: Products
+
+  - term: ARC
+    label: Airlines Reporting Corporation
+    definition: Settlement body for US travel agencies, processing ticket settlements between agencies and airlines.
+    domain: Settlement
+
+  - term: BSP
+    label: Billing and Settlement Plan
+    definition: IATA-managed settlement system for travel agencies outside the US.
+    domain: Settlement

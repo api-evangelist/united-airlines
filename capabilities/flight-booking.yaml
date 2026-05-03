@@ -1,0 +1,270 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "United Airlines Flight Booking"
+  description: >-
+    United Airlines flight booking and travel management capability combining NDC shopping,
+    booking creation, servicing, and flight status into a unified workflow for travel agencies,
+    corporate booking tools, and online travel platforms.
+  tags:
+    - Airlines
+    - Travel
+    - Flight Booking
+    - NDC
+    - Corporate Travel
+    - Shopping
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      UNITED_AIRLINES_OAUTH_TOKEN: UNITED_AIRLINES_OAUTH_TOKEN
+
+capability:
+  consumes:
+    - import: united-airlines-ndc
+      location: ./shared/united-airlines-ndc.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: united-airlines-booking-api
+      description: "Unified REST API for United Airlines flight booking and travel management."
+      resources:
+        - path: /v1/offers
+          name: offers
+          description: "Flight offer search and pricing"
+          operations:
+            - method: POST
+              name: search-flight-offers
+              description: "Search for available United Airlines flights with continuous pricing"
+              call: "united-airlines-ndc.search-flight-offers"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: GET
+              name: get-flight-offer
+              description: "Get detailed pricing for a specific offer"
+              call: "united-airlines-ndc.get-flight-offer"
+              with:
+                offerId: "rest.offerId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/bookings
+          name: bookings
+          description: "Booking creation and management"
+          operations:
+            - method: POST
+              name: create-booking
+              description: "Create a new flight booking"
+              call: "united-airlines-ndc.create-booking"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: GET
+              name: list-bookings
+              description: "List all bookings"
+              call: "united-airlines-ndc.list-bookings"
+              with:
+                status: "rest.status"
+                departureDate: "rest.departureDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/bookings/{id}
+          name: booking
+          description: "Individual booking operations"
+          operations:
+            - method: GET
+              name: get-booking
+              description: "Get booking details"
+              call: "united-airlines-ndc.get-booking"
+              with:
+                bookingId: "rest.id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: DELETE
+              name: cancel-booking
+              description: "Cancel a booking"
+              call: "united-airlines-ndc.cancel-booking"
+              with:
+                bookingId: "rest.id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/bookings/{id}/exchange
+          name: booking-exchange
+          description: "Flight exchange operations"
+          operations:
+            - method: POST
+              name: exchange-booking
+              description: "Exchange flights on an existing booking"
+              call: "united-airlines-ndc.exchange-booking"
+              with:
+                bookingId: "rest.id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/bookings/{id}/ancillaries
+          name: booking-ancillaries
+          description: "Add ancillary services to booking"
+          operations:
+            - method: POST
+              name: add-ancillary
+              description: "Add seat, bag, or upgrade to a booking"
+              call: "united-airlines-ndc.add-ancillary"
+              with:
+                bookingId: "rest.id"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/flights/status
+          name: flight-status
+          description: "Real-time flight status"
+          operations:
+            - method: GET
+              name: get-flight-status
+              description: "Get real-time status for a flight"
+              call: "united-airlines-ndc.get-flight-status"
+              with:
+                flightNumber: "rest.flightNumber"
+                date: "rest.date"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/flights/schedules
+          name: flight-schedules
+          description: "Flight schedule information"
+          operations:
+            - method: GET
+              name: get-flight-schedules
+              description: "Get flight schedules for a route"
+              call: "united-airlines-ndc.get-flight-schedules"
+              with:
+                origin: "rest.origin"
+                destination: "rest.destination"
+                startDate: "rest.startDate"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9080
+      namespace: united-airlines-booking-mcp
+      transport: http
+      description: "MCP server for AI-assisted United Airlines flight booking and travel management."
+      tools:
+        - name: search-flights
+          description: "Search for available United Airlines flights with pricing, bundles, and cabin options"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "united-airlines-ndc.search-flight-offers"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-flight-offer
+          description: "Get detailed pricing and availability for a specific flight offer"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "united-airlines-ndc.get-flight-offer"
+          with:
+            offerId: "tools.offerId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-booking
+          description: "Book United Airlines flights for one or more passengers"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "united-airlines-ndc.create-booking"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-bookings
+          description: "List existing flight bookings with optional status and date filters"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "united-airlines-ndc.list-bookings"
+          with:
+            status: "tools.status"
+            departureDate: "tools.departureDate"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-booking
+          description: "Retrieve details of a specific United Airlines booking"
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "united-airlines-ndc.get-booking"
+          with:
+            bookingId: "tools.bookingId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: cancel-booking
+          description: "Cancel a United Airlines flight booking"
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "united-airlines-ndc.cancel-booking"
+          with:
+            bookingId: "tools.bookingId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: exchange-booking
+          description: "Change flights on an existing booking"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "united-airlines-ndc.exchange-booking"
+          with:
+            bookingId: "tools.bookingId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: add-ancillary
+          description: "Add seat selection, checked bag, or upgrade to a booking"
+          hints:
+            readOnly: false
+            destructive: false
+          call: "united-airlines-ndc.add-ancillary"
+          with:
+            bookingId: "tools.bookingId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-flight-status
+          description: "Get real-time departure, arrival, and gate status for a United flight"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "united-airlines-ndc.get-flight-status"
+          with:
+            flightNumber: "tools.flightNumber"
+            date: "tools.date"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-flight-schedules
+          description: "Get United Airlines schedules for a specific route and date range"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "united-airlines-ndc.get-flight-schedules"
+          with:
+            origin: "tools.origin"
+            destination: "tools.destination"
+            startDate: "tools.startDate"
+          outputParameters:
+            - type: object
+              mapping: "$."

@@ -1,0 +1,833 @@
+openapi: 3.1.0
+info:
+  title: United Airlines NDC API
+  description: >-
+    United Airlines NDC (New Distribution Capability) API enables travel agencies,
+    online booking tools, and corporate travel platforms to search, book, and service
+    United flights. The API provides access to continuous pricing, dynamic bundled
+    fares (30+ product combinations), ancillary products, hold bookings, exchanges,
+    refunds, cancellations, automatic waiver application, and ARC/BSP reporting.
+    Compliant with IATA NDC standards.
+  version: 1.0.0
+  contact:
+    name: United Airlines NDC Support
+    email: ndcagency@united.com
+    url: https://united.business/NDC-corporate
+  termsOfService: https://united.business/NDC-corporate
+servers:
+  - url: https://api.united.com/v1
+    description: United Airlines NDC Production API
+tags:
+  - name: Shopping
+    description: Flight search and pricing operations
+  - name: Booking
+    description: Flight booking and reservation management
+  - name: Servicing
+    description: Post-booking modifications, refunds, and ancillaries
+  - name: Status
+    description: Flight status and schedule information
+paths:
+  /shopping/offers:
+    post:
+      operationId: searchFlightOffers
+      summary: Search Flight Offers
+      description: >-
+        Search for available United Airlines flights with continuous pricing.
+        Returns flight offers including Basic Economy, standard fares, and
+        dynamic bundled fares with ancillary combinations.
+      tags:
+        - Shopping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlightSearchRequest'
+      responses:
+        '200':
+          description: Flight offers returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightOffersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+        - OAuth2: [booking]
+  /shopping/offers/{offerId}:
+    get:
+      operationId: getFlightOffer
+      summary: Get Flight Offer Details
+      description: Retrieve detailed pricing and availability for a specific flight offer.
+      tags:
+        - Shopping
+      parameters:
+        - name: offerId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the flight offer
+      responses:
+        '200':
+          description: Flight offer details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightOffer'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+  /bookings:
+    post:
+      operationId: createBooking
+      summary: Create Booking
+      description: >-
+        Create a new flight booking using a selected offer. Supports hold bookings
+        (fare-dependent), credit card payment with two-factor authentication,
+        and unused ticket application as payment.
+      tags:
+        - Booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      security:
+        - OAuth2: [booking]
+    get:
+      operationId: listBookings
+      summary: List Bookings
+      description: Retrieve a list of bookings for the agency or traveler account.
+      tags:
+        - Booking
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [confirmed, held, cancelled]
+          description: Filter bookings by status
+        - name: departureDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: Filter by departure date (YYYY-MM-DD)
+      responses:
+        '200':
+          description: List of bookings returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+  /bookings/{bookingId}:
+    get:
+      operationId: getBooking
+      summary: Get Booking
+      description: Retrieve details of a specific booking by its ID.
+      tags:
+        - Booking
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique booking identifier (PNR/record locator)
+      responses:
+        '200':
+          description: Booking details returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+    delete:
+      operationId: cancelBooking
+      summary: Cancel Booking
+      description: Cancel an existing booking. Applies automatic waivers during operational disruptions.
+      tags:
+        - Servicing
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique booking identifier
+      responses:
+        '200':
+          description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancellationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+  /bookings/{bookingId}/exchange:
+    post:
+      operationId: exchangeBooking
+      summary: Exchange Booking
+      description: >-
+        Modify an existing booking by exchanging flights. Supports changes,
+        multi-option flight displays for rebooking, and exchange of held bookings.
+      tags:
+        - Servicing
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique booking identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRequest'
+      responses:
+        '200':
+          description: Booking exchange completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+  /bookings/{bookingId}/refund:
+    post:
+      operationId: refundBooking
+      summary: Refund Booking
+      description: Process a refund for a cancelled or eligible booking.
+      tags:
+        - Servicing
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique booking identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '200':
+          description: Refund processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+  /bookings/{bookingId}/ancillaries:
+    post:
+      operationId: addAncillary
+      summary: Add Ancillary Service
+      description: Add ancillary products and services (seats, bags, upgrades) to an existing booking.
+      tags:
+        - Servicing
+      parameters:
+        - name: bookingId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique booking identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AncillaryRequest'
+      responses:
+        '200':
+          description: Ancillary service added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [booking]
+  /flights/status:
+    get:
+      operationId: getFlightStatus
+      summary: Get Flight Status
+      description: >-
+        Retrieve real-time flight status including estimated and actual departure
+        and arrival times, gate information, and delays.
+      tags:
+        - Status
+      parameters:
+        - name: flightNumber
+          in: query
+          required: true
+          schema:
+            type: string
+          description: United Airlines flight number (e.g., UA123)
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Flight date (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Flight status returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightStatus'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [read]
+  /flights/schedules:
+    get:
+      operationId: getFlightSchedules
+      summary: Get Flight Schedules
+      description: Retrieve United Airlines flight schedules for a given origin-destination pair and date range.
+      tags:
+        - Status
+      parameters:
+        - name: origin
+          in: query
+          required: true
+          schema:
+            type: string
+          description: IATA airport code for origin (e.g., ORD)
+        - name: destination
+          in: query
+          required: true
+          schema:
+            type: string
+          description: IATA airport code for destination (e.g., LAX)
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Start date for schedule query (YYYY-MM-DD)
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+          description: End date for schedule query (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Flight schedules returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlightSchedule'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+        - OAuth2: [read]
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.united.com/v1/oauth/token
+          scopes:
+            read: Read-only access to flight data
+            booking: Full booking and servicing access
+  schemas:
+    FlightSearchRequest:
+      type: object
+      required:
+        - origin
+        - destination
+        - departureDate
+        - passengers
+      properties:
+        origin:
+          type: string
+          description: IATA origin airport code
+          example: ORD
+        destination:
+          type: string
+          description: IATA destination airport code
+          example: LAX
+        departureDate:
+          type: string
+          format: date
+          description: Outbound departure date
+          example: '2026-07-15'
+        returnDate:
+          type: string
+          format: date
+          description: Return departure date for round trips
+        passengers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PassengerSpec'
+        cabinPreference:
+          type: string
+          enum: [Economy, PremiumEconomy, Business, First]
+          description: Preferred cabin class
+        includeBundles:
+          type: boolean
+          description: Include dynamic bundled fare combinations
+          default: true
+    PassengerSpec:
+      type: object
+      required:
+        - type
+        - count
+      properties:
+        type:
+          type: string
+          enum: [ADT, CHD, INF]
+          description: Passenger type (Adult, Child, Infant)
+        count:
+          type: integer
+          minimum: 1
+          description: Number of passengers of this type
+    FlightOffersResponse:
+      type: object
+      properties:
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightOffer'
+        currency:
+          type: string
+          example: USD
+        searchId:
+          type: string
+          description: Unique ID for this search session
+    FlightOffer:
+      type: object
+      properties:
+        offerId:
+          type: string
+          description: Unique offer identifier
+        price:
+          $ref: '#/components/schemas/Price'
+        itineraries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Itinerary'
+        fareClass:
+          type: string
+          description: Fare class code
+        fareType:
+          type: string
+          enum: [BasicEconomy, Economy, PremiumEconomy, Business, First]
+        bundleOptions:
+          type: array
+          description: Available ancillary bundle combinations
+          items:
+            type: object
+            properties:
+              bundleId:
+                type: string
+              description:
+                type: string
+              additionalPrice:
+                $ref: '#/components/schemas/Price'
+        holdEligible:
+          type: boolean
+          description: Whether this fare is eligible for a hold booking
+    Price:
+      type: object
+      properties:
+        total:
+          type: number
+          format: double
+        base:
+          type: number
+          format: double
+        taxes:
+          type: number
+          format: double
+        currency:
+          type: string
+          example: USD
+    Itinerary:
+      type: object
+      properties:
+        segments:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlightSegment'
+        duration:
+          type: string
+          description: Total journey duration in ISO 8601 format
+          example: PT5H30M
+    FlightSegment:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          example: UA123
+        origin:
+          type: string
+          example: ORD
+        destination:
+          type: string
+          example: LAX
+        departureTime:
+          type: string
+          format: date-time
+        arrivalTime:
+          type: string
+          format: date-time
+        aircraft:
+          type: string
+          description: Aircraft type
+          example: Boeing 737 MAX
+        operatingCarrier:
+          type: string
+          description: IATA carrier code of operating airline
+          example: UA
+    BookingRequest:
+      type: object
+      required:
+        - offerId
+        - passengers
+        - contact
+        - payment
+      properties:
+        offerId:
+          type: string
+          description: Offer ID from shopping response
+        passengers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Passenger'
+        contact:
+          $ref: '#/components/schemas/ContactInfo'
+        payment:
+          $ref: '#/components/schemas/PaymentInfo'
+        holdBooking:
+          type: boolean
+          description: Create a held booking without immediate payment (fare-dependent)
+          default: false
+        unusedTicketNumber:
+          type: string
+          description: Apply an unused ticket as payment
+    Passenger:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - type
+        - dateOfBirth
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        type:
+          type: string
+          enum: [ADT, CHD, INF]
+        dateOfBirth:
+          type: string
+          format: date
+        mileagePlusNumber:
+          type: string
+          description: United MileagePlus loyalty number
+        knownTravelerNumber:
+          type: string
+          description: TSA PreCheck Known Traveler Number
+        passportNumber:
+          type: string
+    ContactInfo:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+    PaymentInfo:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [creditCard, unusedTicket]
+        cardNumber:
+          type: string
+        cardExpiry:
+          type: string
+          example: '2028-12'
+        cardholderName:
+          type: string
+        twoFactorCode:
+          type: string
+          description: Two-factor authentication code for card transactions
+    BookingResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          description: Unique booking identifier
+        recordLocator:
+          type: string
+          description: PNR record locator (6-character code)
+          example: ABCDEF
+        status:
+          type: string
+          enum: [confirmed, held, cancelled]
+        passengers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Passenger'
+        itineraries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Itinerary'
+        price:
+          $ref: '#/components/schemas/Price'
+        createdAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+          description: Expiry time for held bookings
+    ExchangeRequest:
+      type: object
+      required:
+        - newOfferId
+      properties:
+        newOfferId:
+          type: string
+          description: New offer ID for the exchanged flights
+        passengers:
+          type: array
+          items:
+            type: string
+          description: Passenger IDs to include in exchange
+    RefundRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason for refund
+        passengers:
+          type: array
+          items:
+            type: string
+          description: Passenger IDs to refund
+    RefundResponse:
+      type: object
+      properties:
+        refundId:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Price'
+        status:
+          type: string
+          enum: [processed, pending]
+        estimatedProcessingDays:
+          type: integer
+    AncillaryRequest:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: [seat, bag, upgrade, insurance, lounge]
+        passengerId:
+          type: string
+        segmentId:
+          type: string
+        seatNumber:
+          type: string
+          description: For seat selection requests
+    CancellationResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+        status:
+          type: string
+          enum: [cancelled]
+        refundEligible:
+          type: boolean
+        waiverApplied:
+          type: boolean
+          description: Whether an automatic waiver was applied during operational disruption
+    FlightStatus:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+          example: UA123
+        date:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [OnTime, Delayed, Cancelled, Diverted, Landed]
+        origin:
+          type: string
+        destination:
+          type: string
+        scheduledDeparture:
+          type: string
+          format: date-time
+        estimatedDeparture:
+          type: string
+          format: date-time
+        actualDeparture:
+          type: string
+          format: date-time
+        scheduledArrival:
+          type: string
+          format: date-time
+        estimatedArrival:
+          type: string
+          format: date-time
+        actualArrival:
+          type: string
+          format: date-time
+        departureGate:
+          type: string
+        arrivalGate:
+          type: string
+        delayMinutes:
+          type: integer
+    FlightSchedule:
+      type: object
+      properties:
+        flightNumber:
+          type: string
+        origin:
+          type: string
+        destination:
+          type: string
+        departureTime:
+          type: string
+          description: Scheduled departure time (local)
+        arrivalTime:
+          type: string
+          description: Scheduled arrival time (local)
+        daysOperating:
+          type: array
+          items:
+            type: string
+            enum: [Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday]
+        aircraft:
+          type: string
+        effectiveFrom:
+          type: string
+          format: date
+        effectiveTo:
+          type: string
+          format: date
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string

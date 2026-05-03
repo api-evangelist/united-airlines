@@ -1,0 +1,35 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v1/flights/status",
+    "headers": {
+      "Authorization": "Bearer eyJhbGciOiJSUzI1NiJ9..."
+    },
+    "query": {
+      "flightNumber": "UA523",
+      "date": "2026-07-15"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "flightNumber": "UA523",
+      "date": "2026-07-15",
+      "status": "OnTime",
+      "origin": "ORD",
+      "destination": "LAX",
+      "scheduledDeparture": "2026-07-15T08:00:00-05:00",
+      "estimatedDeparture": "2026-07-15T08:00:00-05:00",
+      "actualDeparture": null,
+      "scheduledArrival": "2026-07-15T10:30:00-07:00",
+      "estimatedArrival": "2026-07-15T10:30:00-07:00",
+      "actualArrival": null,
+      "departureGate": "B12",
+      "arrivalGate": "67",
+      "delayMinutes": 0
+    }
+  }
+}

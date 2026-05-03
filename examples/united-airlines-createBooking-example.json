@@ -1,0 +1,102 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/bookings",
+    "headers": {
+      "Authorization": "Bearer eyJhbGciOiJSUzI1NiJ9...",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "offerId": "off_9x8y7z6w5v",
+      "holdBooking": false,
+      "passengers": [
+        {
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "type": "ADT",
+          "dateOfBirth": "1985-03-15",
+          "mileagePlusNumber": "MP12345678",
+          "knownTravelerNumber": "KTN9876543"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Smith",
+          "type": "ADT",
+          "dateOfBirth": "1983-07-22"
+        }
+      ],
+      "contact": {
+        "email": "jane.smith@example.com",
+        "phone": "+1-312-555-0100"
+      },
+      "payment": {
+        "type": "creditCard",
+        "cardNumber": "4111111111111111",
+        "cardExpiry": "2028-09",
+        "cardholderName": "Jane Smith",
+        "twoFactorCode": "483921"
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "bookingId": "bkg_ua_20260715_xyz",
+      "recordLocator": "XKJMWP",
+      "status": "confirmed",
+      "passengers": [
+        {
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "type": "ADT",
+          "mileagePlusNumber": "MP12345678"
+        },
+        {
+          "firstName": "John",
+          "lastName": "Smith",
+          "type": "ADT"
+        }
+      ],
+      "itineraries": [
+        {
+          "duration": "PT4H30M",
+          "segments": [
+            {
+              "flightNumber": "UA523",
+              "origin": "ORD",
+              "destination": "LAX",
+              "departureTime": "2026-07-15T08:00:00-05:00",
+              "arrivalTime": "2026-07-15T10:30:00-07:00",
+              "aircraft": "Boeing 737 MAX 9",
+              "operatingCarrier": "UA"
+            }
+          ]
+        },
+        {
+          "duration": "PT4H15M",
+          "segments": [
+            {
+              "flightNumber": "UA602",
+              "origin": "LAX",
+              "destination": "ORD",
+              "departureTime": "2026-07-22T14:00:00-07:00",
+              "arrivalTime": "2026-07-22T20:15:00-05:00",
+              "aircraft": "Boeing 737 MAX 9",
+              "operatingCarrier": "UA"
+            }
+          ]
+        }
+      ],
+      "price": {
+        "total": 598.40,
+        "base": 498.00,
+        "taxes": 100.40,
+        "currency": "USD"
+      },
+      "createdAt": "2026-05-03T14:32:00Z"
+    }
+  }
+}

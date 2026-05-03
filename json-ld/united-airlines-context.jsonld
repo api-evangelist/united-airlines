@@ -1,0 +1,80 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "ua": "https://schema.united.com/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Booking": {
+      "@id": "ua:Booking",
+      "@type": "@id",
+      "subClassOf": "schema:Order"
+    },
+    "bookingId": { "@id": "ua:bookingId", "@type": "xsd:string" },
+    "recordLocator": { "@id": "ua:recordLocator", "@type": "xsd:string" },
+    "status": { "@id": "ua:status", "@type": "xsd:string" },
+
+    "FlightOffer": {
+      "@id": "ua:FlightOffer",
+      "@type": "@id",
+      "subClassOf": "schema:Offer"
+    },
+    "offerId": { "@id": "ua:offerId", "@type": "xsd:string" },
+    "fareType": { "@id": "ua:fareType", "@type": "xsd:string" },
+    "fareClass": { "@id": "ua:fareClass", "@type": "xsd:string" },
+    "holdEligible": { "@id": "ua:holdEligible", "@type": "xsd:boolean" },
+
+    "FlightSegment": {
+      "@id": "ua:FlightSegment",
+      "@type": "@id",
+      "subClassOf": "schema:Trip"
+    },
+    "flightNumber": { "@id": "ua:flightNumber", "@type": "xsd:string" },
+    "origin": { "@id": "schema:departureAirport", "@type": "@id" },
+    "destination": { "@id": "schema:arrivalAirport", "@type": "@id" },
+    "departureTime": { "@id": "schema:departureTime", "@type": "xsd:dateTime" },
+    "arrivalTime": { "@id": "schema:arrivalTime", "@type": "xsd:dateTime" },
+    "aircraft": { "@id": "ua:aircraft", "@type": "xsd:string" },
+    "operatingCarrier": { "@id": "ua:operatingCarrier", "@type": "xsd:string" },
+
+    "Passenger": {
+      "@id": "ua:Passenger",
+      "@type": "@id",
+      "subClassOf": "schema:Person"
+    },
+    "firstName": { "@id": "schema:givenName", "@type": "xsd:string" },
+    "lastName": { "@id": "schema:familyName", "@type": "xsd:string" },
+    "mileagePlusNumber": { "@id": "ua:mileagePlusNumber", "@type": "xsd:string" },
+    "knownTravelerNumber": { "@id": "ua:knownTravelerNumber", "@type": "xsd:string" },
+
+    "Price": {
+      "@id": "ua:Price",
+      "@type": "@id",
+      "subClassOf": "schema:PriceSpecification"
+    },
+    "total": { "@id": "schema:price", "@type": "xsd:decimal" },
+    "base": { "@id": "ua:basePrice", "@type": "xsd:decimal" },
+    "taxes": { "@id": "ua:taxAmount", "@type": "xsd:decimal" },
+    "currency": { "@id": "schema:priceCurrency", "@type": "xsd:string" },
+
+    "FlightStatus": {
+      "@id": "ua:FlightStatus",
+      "@type": "@id",
+      "subClassOf": "schema:Trip"
+    },
+    "scheduledDeparture": { "@id": "ua:scheduledDeparture", "@type": "xsd:dateTime" },
+    "estimatedDeparture": { "@id": "ua:estimatedDeparture", "@type": "xsd:dateTime" },
+    "actualDeparture": { "@id": "ua:actualDeparture", "@type": "xsd:dateTime" },
+    "scheduledArrival": { "@id": "ua:scheduledArrival", "@type": "xsd:dateTime" },
+    "estimatedArrival": { "@id": "ua:estimatedArrival", "@type": "xsd:dateTime" },
+    "actualArrival": { "@id": "ua:actualArrival", "@type": "xsd:dateTime" },
+    "departureGate": { "@id": "ua:departureGate", "@type": "xsd:string" },
+    "arrivalGate": { "@id": "ua:arrivalGate", "@type": "xsd:string" },
+    "delayMinutes": { "@id": "ua:delayMinutes", "@type": "xsd:integer" },
+
+    "passengers": { "@id": "ua:hasPassenger", "@type": "@id", "@container": "@set" },
+    "itineraries": { "@id": "ua:hasItinerary", "@type": "@id", "@container": "@set" },
+    "segments": { "@id": "ua:hasSegment", "@type": "@id", "@container": "@list" },
+    "price": { "@id": "ua:hasPrice", "@type": "@id" }
+  }
+}

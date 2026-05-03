@@ -1,0 +1,116 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/v1/shopping/offers",
+    "headers": {
+      "Authorization": "Bearer eyJhbGciOiJSUzI1NiJ9...",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "origin": "ORD",
+      "destination": "LAX",
+      "departureDate": "2026-07-15",
+      "returnDate": "2026-07-22",
+      "passengers": [
+        { "type": "ADT", "count": 2 }
+      ],
+      "cabinPreference": "Economy",
+      "includeBundles": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "searchId": "srch_a1b2c3d4e5f6",
+      "currency": "USD",
+      "offers": [
+        {
+          "offerId": "off_9x8y7z6w5v",
+          "fareType": "Economy",
+          "fareClass": "V",
+          "holdEligible": true,
+          "price": {
+            "total": 598.40,
+            "base": 498.00,
+            "taxes": 100.40,
+            "currency": "USD"
+          },
+          "itineraries": [
+            {
+              "duration": "PT4H30M",
+              "segments": [
+                {
+                  "flightNumber": "UA523",
+                  "origin": "ORD",
+                  "destination": "LAX",
+                  "departureTime": "2026-07-15T08:00:00-05:00",
+                  "arrivalTime": "2026-07-15T10:30:00-07:00",
+                  "aircraft": "Boeing 737 MAX 9",
+                  "operatingCarrier": "UA"
+                }
+              ]
+            },
+            {
+              "duration": "PT4H15M",
+              "segments": [
+                {
+                  "flightNumber": "UA602",
+                  "origin": "LAX",
+                  "destination": "ORD",
+                  "departureTime": "2026-07-22T14:00:00-07:00",
+                  "arrivalTime": "2026-07-22T20:15:00-05:00",
+                  "aircraft": "Boeing 737 MAX 9",
+                  "operatingCarrier": "UA"
+                }
+              ]
+            }
+          ],
+          "bundleOptions": [
+            {
+              "bundleId": "bndl_seats_bags",
+              "description": "Economy Plus seats + 1 checked bag each",
+              "additionalPrice": {
+                "total": 120.00,
+                "base": 120.00,
+                "taxes": 0.00,
+                "currency": "USD"
+              }
+            }
+          ]
+        },
+        {
+          "offerId": "off_3r4s5t6u7v",
+          "fareType": "BasicEconomy",
+          "fareClass": "N",
+          "holdEligible": false,
+          "price": {
+            "total": 478.20,
+            "base": 398.00,
+            "taxes": 80.20,
+            "currency": "USD"
+          },
+          "itineraries": [
+            {
+              "duration": "PT4H30M",
+              "segments": [
+                {
+                  "flightNumber": "UA523",
+                  "origin": "ORD",
+                  "destination": "LAX",
+                  "departureTime": "2026-07-15T08:00:00-05:00",
+                  "arrivalTime": "2026-07-15T10:30:00-07:00",
+                  "aircraft": "Boeing 737 MAX 9",
+                  "operatingCarrier": "UA"
+                }
+              ]
+            }
+          ],
+          "bundleOptions": []
+        }
+      ]
+    }
+  }
+}

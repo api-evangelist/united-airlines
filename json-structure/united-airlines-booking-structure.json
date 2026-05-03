@@ -1,0 +1,65 @@
+{
+  "name": "United Airlines Booking",
+  "description": "Structure of a United Airlines NDC booking (PNR) including passenger, itinerary, and pricing data.",
+  "fields": [
+    { "name": "bookingId", "type": "string", "required": true, "description": "Unique booking identifier" },
+    { "name": "recordLocator", "type": "string", "required": true, "description": "6-character PNR code (e.g., ABCDEF)" },
+    { "name": "status", "type": "enum", "required": true, "values": ["confirmed", "held", "cancelled"], "description": "Booking status" },
+    {
+      "name": "passengers",
+      "type": "array",
+      "required": true,
+      "description": "Passenger details",
+      "items": {
+        "fields": [
+          { "name": "firstName", "type": "string", "required": true },
+          { "name": "lastName", "type": "string", "required": true },
+          { "name": "type", "type": "enum", "required": true, "values": ["ADT", "CHD", "INF"], "description": "Adult, Child, or Infant" },
+          { "name": "dateOfBirth", "type": "date", "required": false },
+          { "name": "mileagePlusNumber", "type": "string", "required": false, "description": "MileagePlus loyalty number" },
+          { "name": "knownTravelerNumber", "type": "string", "required": false }
+        ]
+      }
+    },
+    {
+      "name": "itineraries",
+      "type": "array",
+      "required": true,
+      "description": "Outbound and/or return itineraries",
+      "items": {
+        "fields": [
+          { "name": "duration", "type": "string", "required": false, "description": "ISO 8601 duration (e.g., PT4H30M)" },
+          {
+            "name": "segments",
+            "type": "array",
+            "required": true,
+            "items": {
+              "fields": [
+                { "name": "flightNumber", "type": "string", "required": true, "description": "e.g., UA523" },
+                { "name": "origin", "type": "string", "required": true, "description": "IATA code" },
+                { "name": "destination", "type": "string", "required": true, "description": "IATA code" },
+                { "name": "departureTime", "type": "datetime", "required": true },
+                { "name": "arrivalTime", "type": "datetime", "required": true },
+                { "name": "aircraft", "type": "string", "required": false },
+                { "name": "operatingCarrier", "type": "string", "required": false, "description": "IATA carrier code" }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "price",
+      "type": "object",
+      "required": true,
+      "fields": [
+        { "name": "total", "type": "number", "required": true },
+        { "name": "base", "type": "number", "required": false },
+        { "name": "taxes", "type": "number", "required": false },
+        { "name": "currency", "type": "string", "required": true, "description": "ISO 4217 code, e.g., USD" }
+      ]
+    },
+    { "name": "createdAt", "type": "datetime", "required": false },
+    { "name": "expiresAt", "type": "datetime", "required": false, "description": "For held bookings" }
+  ]
+}

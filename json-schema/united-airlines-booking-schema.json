@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-schema/united-airlines-booking-schema.json",
+  "title": "United Airlines Booking",
+  "description": "Schema representing a United Airlines flight booking (PNR) with passenger, itinerary, and pricing information.",
+  "type": "object",
+  "properties": {
+    "bookingId": {
+      "type": "string",
+      "description": "Unique booking identifier"
+    },
+    "recordLocator": {
+      "type": "string",
+      "description": "PNR record locator (6-character alphanumeric code)",
+      "pattern": "^[A-Z0-9]{6}$",
+      "examples": ["ABCDEF"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["confirmed", "held", "cancelled"],
+      "description": "Current booking status"
+    },
+    "passengers": {
+      "type": "array",
+      "description": "List of passengers on the booking",
+      "items": {
+        "$ref": "#/$defs/Passenger"
+      },
+      "minItems": 1
+    },
+    "itineraries": {
+      "type": "array",
+      "description": "Outbound and/or return journey itineraries",
+      "items": {
+        "$ref": "#/$defs/Itinerary"
+      }
+    },
+    "price": {
+      "$ref": "#/$defs/Price"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Booking creation timestamp"
+    },
+    "expiresAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Expiry timestamp for held bookings"
+    }
+  },
+  "required": ["bookingId", "recordLocator", "status", "passengers", "itineraries", "price"],
+  "$defs": {
+    "Passenger": {
+      "type": "object",
+      "title": "Passenger",
+      "description": "A passenger on the booking",
+      "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["ADT", "CHD", "INF"],
+          "description": "Passenger type: Adult, Child, Infant"
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "format": "date"
+        },
+        "mileagePlusNumber": {
+          "type": "string",
+          "description": "United MileagePlus loyalty number"
+        },
+        "knownTravelerNumber": {
+          "type": "string",
+          "description": "TSA PreCheck Known Traveler Number"
+        }
+      },
+      "required": ["firstName", "lastName", "type"]
+    },
+    "Itinerary": {
+      "type": "object",
+      "title": "Itinerary",
+      "description": "A travel itinerary consisting of one or more flight segments",
+      "properties": {
+        "duration": {
+          "type": "string",
+          "description": "Total journey duration in ISO 8601 duration format",
+          "examples": ["PT4H30M"]
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FlightSegment"
+          }
+        }
+      },
+      "required": ["segments"]
+    },
+    "FlightSegment": {
+      "type": "object",
+      "title": "Flight Segment",
+      "description": "An individual flight leg within an itinerary",
+      "properties": {
+        "flightNumber": {
+          "type": "string",
+          "description": "United Airlines flight number",
+          "examples": ["UA523"]
+        },
+        "origin": {
+          "type": "string",
+          "description": "IATA origin airport code",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "destination": {
+          "type": "string",
+          "description": "IATA destination airport code",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "departureTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "arrivalTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "aircraft": {
+          "type": "string",
+          "description": "Aircraft type",
+          "examples": ["Boeing 737 MAX 9"]
+        },
+        "operatingCarrier": {
+          "type": "string",
+          "description": "IATA carrier code",
+          "examples": ["UA"]
+        }
+      },
+      "required": ["flightNumber", "origin", "destination", "departureTime", "arrivalTime"]
+    },
+    "Price": {
+      "type": "object",
+      "title": "Price",
+      "description": "Monetary price breakdown",
+      "properties": {
+        "total": {
+          "type": "number",
+          "format": "double",
+          "description": "Total amount including taxes"
+        },
+        "base": {
+          "type": "number",
+          "format": "double",
+          "description": "Base fare amount"
+        },
+        "taxes": {
+          "type": "number",
+          "format": "double",
+          "description": "Total tax amount"
+        },
+        "currency": {
+          "type": "string",
+          "description": "ISO 4217 currency code",
+          "examples": ["USD"]
+        }
+      },
+      "required": ["total", "currency"]
+    }
+  }
+}
