@@ -1,0 +1,122 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: United Airlines NDC API — Shopping
+  description: 'United Airlines NDC API — Shopping. 2 operations. Lead operation: Search Flight Offers. Self-contained Naftiko
+    capability covering one United Airlines business surface.'
+  tags:
+  - United Airlines
+  - Shopping
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    UNITED_AIRLINES_API_KEY: UNITED_AIRLINES_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ndc-shopping
+    baseUri: https://api.united.com/v1
+    description: United Airlines NDC API — Shopping business capability. Self-contained, no shared references.
+    resources:
+    - name: shopping-offers
+      path: /shopping/offers
+      operations:
+      - name: searchflightoffers
+        method: POST
+        description: Search Flight Offers
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: shopping-offers-offerId
+      path: /shopping/offers/{offerId}
+      operations:
+      - name: getflightoffer
+        method: GET
+        description: Get Flight Offer Details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: offerId
+          in: path
+          type: string
+          description: Unique identifier of the flight offer
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.UNITED_AIRLINES_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ndc-shopping-rest
+    port: 8080
+    description: REST adapter for United Airlines NDC API — Shopping. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/shopping/offers
+      name: shopping-offers
+      description: REST surface for shopping-offers.
+      operations:
+      - method: POST
+        name: searchflightoffers
+        description: Search Flight Offers
+        call: ndc-shopping.searchflightoffers
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/shopping/offers/{offerid}
+      name: shopping-offers-offerid
+      description: REST surface for shopping-offers-offerId.
+      operations:
+      - method: GET
+        name: getflightoffer
+        description: Get Flight Offer Details
+        call: ndc-shopping.getflightoffer
+        with:
+          offerId: rest.offerId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ndc-shopping-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for United Airlines NDC API — Shopping. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: search-flight-offers
+      description: Search Flight Offers
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: ndc-shopping.searchflightoffers
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-flight-offer-details
+      description: Get Flight Offer Details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: ndc-shopping.getflightoffer
+      with:
+        offerId: tools.offerId
+      outputParameters:
+      - type: object
+        mapping: $.

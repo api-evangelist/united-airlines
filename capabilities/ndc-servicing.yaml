@@ -1,0 +1,227 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: United Airlines NDC API — Servicing
+  description: 'United Airlines NDC API — Servicing. 4 operations. Lead operation: Cancel Booking. Self-contained Naftiko
+    capability covering one United Airlines business surface.'
+  tags:
+  - United Airlines
+  - Servicing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    UNITED_AIRLINES_API_KEY: UNITED_AIRLINES_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ndc-servicing
+    baseUri: https://api.united.com/v1
+    description: United Airlines NDC API — Servicing business capability. Self-contained, no shared references.
+    resources:
+    - name: bookings-bookingId
+      path: /bookings/{bookingId}
+      operations:
+      - name: cancelbooking
+        method: DELETE
+        description: Cancel Booking
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: bookingId
+          in: path
+          type: string
+          description: Unique booking identifier
+          required: true
+    - name: bookings-bookingId-ancillaries
+      path: /bookings/{bookingId}/ancillaries
+      operations:
+      - name: addancillary
+        method: POST
+        description: Add Ancillary Service
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: bookingId
+          in: path
+          type: string
+          description: Unique booking identifier
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: bookings-bookingId-exchange
+      path: /bookings/{bookingId}/exchange
+      operations:
+      - name: exchangebooking
+        method: POST
+        description: Exchange Booking
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: bookingId
+          in: path
+          type: string
+          description: Unique booking identifier
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: bookings-bookingId-refund
+      path: /bookings/{bookingId}/refund
+      operations:
+      - name: refundbooking
+        method: POST
+        description: Refund Booking
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: bookingId
+          in: path
+          type: string
+          description: Unique booking identifier
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.UNITED_AIRLINES_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ndc-servicing-rest
+    port: 8080
+    description: REST adapter for United Airlines NDC API — Servicing. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/bookings/{bookingid}
+      name: bookings-bookingid
+      description: REST surface for bookings-bookingId.
+      operations:
+      - method: DELETE
+        name: cancelbooking
+        description: Cancel Booking
+        call: ndc-servicing.cancelbooking
+        with:
+          bookingId: rest.bookingId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bookings/{bookingid}/ancillaries
+      name: bookings-bookingid-ancillaries
+      description: REST surface for bookings-bookingId-ancillaries.
+      operations:
+      - method: POST
+        name: addancillary
+        description: Add Ancillary Service
+        call: ndc-servicing.addancillary
+        with:
+          bookingId: rest.bookingId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bookings/{bookingid}/exchange
+      name: bookings-bookingid-exchange
+      description: REST surface for bookings-bookingId-exchange.
+      operations:
+      - method: POST
+        name: exchangebooking
+        description: Exchange Booking
+        call: ndc-servicing.exchangebooking
+        with:
+          bookingId: rest.bookingId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/bookings/{bookingid}/refund
+      name: bookings-bookingid-refund
+      description: REST surface for bookings-bookingId-refund.
+      operations:
+      - method: POST
+        name: refundbooking
+        description: Refund Booking
+        call: ndc-servicing.refundbooking
+        with:
+          bookingId: rest.bookingId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ndc-servicing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for United Airlines NDC API — Servicing. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: cancel-booking
+      description: Cancel Booking
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: ndc-servicing.cancelbooking
+      with:
+        bookingId: tools.bookingId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-ancillary-service
+      description: Add Ancillary Service
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: ndc-servicing.addancillary
+      with:
+        bookingId: tools.bookingId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: exchange-booking
+      description: Exchange Booking
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: ndc-servicing.exchangebooking
+      with:
+        bookingId: tools.bookingId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: refund-booking
+      description: Refund Booking
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: ndc-servicing.refundbooking
+      with:
+        bookingId: tools.bookingId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
