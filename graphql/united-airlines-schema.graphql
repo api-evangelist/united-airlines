@@ -1,0 +1,963 @@
+# United Airlines GraphQL Schema
+# Conceptual schema derived from United Airlines NDC API and Flight Status API
+# Source: https://united.business/NDC-corporate
+# Source: https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
+
+scalar DateTime
+scalar Date
+scalar Time
+
+# ─────────────────────────────────────────────
+# Root Types
+# ─────────────────────────────────────────────
+
+type Query {
+  flight(flightNumber: String!, date: Date!): Flight
+  flightStatus(flightNumber: String!, date: Date!): FlightStatus
+  flightSchedule(origin: String!, destination: String!, date: Date!): [FlightSchedule!]!
+  seatMap(flightNumber: String!, date: Date!, cabin: CabinClass): SeatMap
+  booking(pnr: String!, lastName: String!): Booking
+  reservation(reservationId: ID!): Reservation
+  itinerary(itineraryId: ID!): Itinerary
+  passenger(passengerId: ID!): Passenger
+  mileagePlusMember(memberId: String!): MileagePlus
+  airport(iataCode: String!): Airport
+  fareOptions(origin: String!, destination: String!, date: Date!, cabin: CabinClass): [Fare!]!
+  boardingPass(bookingId: ID!, passengerId: ID!): BoardingPass
+  baggage(bookingId: ID!): BaggageAllowance
+}
+
+type Mutation {
+  createBooking(input: BookingInput!): Booking
+  cancelBooking(pnr: String!, reason: String): Cancellation
+  checkinPassenger(bookingId: ID!, passengerId: ID!): Checkin
+  selectSeat(bookingId: ID!, passengerId: ID!, seatNumber: String!): Seat
+  addBaggage(bookingId: ID!, quantity: Int!): BaggageTag
+  requestUpgrade(bookingId: ID!, passengerId: ID!, cabin: CabinClass!): Upgrade
+  requestSpecialAssistance(bookingId: ID!, passengerId: ID!, type: AssistanceType!): SpecialAssistance
+  exchangeTicket(ticketNumber: String!, newItinerary: ItineraryInput!): Ticket
+  refundTicket(ticketNumber: String!, reason: String): Refund
+}
+
+# ─────────────────────────────────────────────
+# Flight Operations
+# ─────────────────────────────────────────────
+
+type Flight {
+  id: ID!
+  flightNumber: FlightNumber!
+  schedule: FlightSchedule!
+  status: FlightStatus!
+  legs: [FlightLeg!]!
+  aircraft: Aircraft!
+  operatedBy: String
+  codeshares: [Codeshare!]!
+  cabin: [Cabin!]!
+  wifi: WiFi
+  inFlightEntertainment: InFlightEntertainment
+  mealService: MealService
+}
+
+type FlightNumber {
+  carrier: String!
+  number: String!
+  suffix: String
+  full: String!
+}
+
+type FlightSchedule {
+  flightNumber: FlightNumber!
+  origin: Airport!
+  destination: Airport!
+  scheduledDeparture: DateTime!
+  scheduledArrival: DateTime!
+  frequency: [String!]!
+  effectiveFrom: Date!
+  effectiveTo: Date
+  stops: Int!
+  segments: [FlightSegment!]!
+}
+
+type FlightStatus {
+  flightNumber: FlightNumber!
+  date: Date!
+  operationalStatus: OperationalStatus!
+  departure: DepartureInfo!
+  arrival: ArrivalInfo!
+  delay: Delay
+  cancellation: Cancellation
+  diversion: Diversion
+  updatedAt: DateTime!
+}
+
+type FlightLeg {
+  legNumber: Int!
+  origin: Airport!
+  destination: Airport!
+  departure: DepartureInfo!
+  arrival: ArrivalInfo!
+  duration: Int
+  aircraft: Aircraft
+  operationalStatus: OperationalStatus!
+}
+
+type FlightSegment {
+  segmentNumber: Int!
+  origin: Airport!
+  destination: Airport!
+  carrier: String!
+  flightNumber: String!
+  cabin: CabinClass!
+  bookingClass: String!
+  fareBasis: String
+  duration: Int
+}
+
+type DepartureInfo {
+  airport: Airport!
+  terminal: Terminal
+  gate: Gate
+  scheduledTime: DateTime!
+  estimatedTime: DateTime
+  actualTime: DateTime
+  boardingTime: DateTime
+  boardingGroup: BoardingGroup
+}
+
+type ArrivalInfo {
+  airport: Airport!
+  terminal: Terminal
+  gate: Gate
+  scheduledTime: DateTime!
+  estimatedTime: DateTime
+  actualTime: DateTime
+  baggageClaim: String
+}
+
+type Gate {
+  gateNumber: String!
+  terminal: Terminal!
+  concourse: String
+  changes: [GateChange!]!
+}
+
+type GateChange {
+  previousGate: String!
+  newGate: String!
+  changedAt: DateTime!
+  reason: String
+}
+
+type BoardingGroup {
+  group: String!
+  label: String
+  openTime: DateTime
+}
+
+type Delay {
+  minutes: Int!
+  reason: String
+  code: String
+  reportedAt: DateTime!
+}
+
+type Cancellation {
+  code: String!
+  reason: String
+  cancelledAt: DateTime!
+  rebookingOptions: [Flight!]
+  refundEligible: Boolean!
+}
+
+type Diversion {
+  originalDestination: Airport!
+  diversionAirport: Airport!
+  reason: String
+  divertedAt: DateTime!
+  expectedResolution: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Aircraft and Seats
+# ─────────────────────────────────────────────
+
+type Aircraft {
+  registrationNumber: String
+  aircraftType: AircraftType!
+  totalSeats: Int!
+  cabins: [Cabin!]!
+  wifiEquipped: Boolean!
+  entertainmentSystem: String
+}
+
+type AircraftType {
+  iataCode: String!
+  name: String!
+  manufacturer: String!
+  model: String!
+  totalSeats: Int!
+  rangeKm: Int
+  configurationNotes: String
+}
+
+type Seat {
+  seatNumber: String!
+  cabin: CabinClass!
+  row: Int!
+  column: String!
+  type: SeatType!
+  available: Boolean!
+  characteristics: [String!]!
+  upgradeCost: Float
+  currency: String
+}
+
+type SeatMap {
+  flightNumber: String!
+  date: Date!
+  aircraft: AircraftType!
+  cabins: [Cabin!]!
+  seats: [Seat!]!
+}
+
+type SeatAvailability {
+  seat: Seat!
+  available: Boolean!
+  price: Float
+  currency: String
+  eligiblePassengers: [String!]
+}
+
+type SeatPreference {
+  passengerId: ID!
+  preferredSeatType: SeatType
+  preferredCabin: CabinClass
+  windowAisle: WindowAisle
+  notes: String
+}
+
+type SeatUpgrade {
+  passengerId: ID!
+  fromCabin: CabinClass!
+  toCabin: CabinClass!
+  status: UpgradeStatus!
+  cost: Float
+  currency: String
+  instruments: [String!]
+  requestedAt: DateTime!
+  processedAt: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Booking and Reservation
+# ─────────────────────────────────────────────
+
+type Booking {
+  id: ID!
+  pnr: PNR!
+  status: BookingStatus!
+  passengers: [Passenger!]!
+  itinerary: Itinerary!
+  tickets: [Ticket!]!
+  fare: Fare!
+  baggageAllowance: BaggageAllowance!
+  createdAt: DateTime!
+  modifiedAt: DateTime!
+  expiresAt: DateTime
+}
+
+type Reservation {
+  reservationId: ID!
+  pnr: PNR!
+  holdExpiry: DateTime
+  passengers: [Passenger!]!
+  itinerary: Itinerary!
+  totalPrice: Float!
+  currency: String!
+  status: ReservationStatus!
+}
+
+type PNR {
+  code: String!
+  carrier: String!
+  createdAt: DateTime!
+  expiresAt: DateTime
+}
+
+type Itinerary {
+  itineraryId: ID!
+  origin: Airport!
+  destination: Airport!
+  outbound: [FlightSegment!]!
+  inbound: [FlightSegment!]
+  totalDuration: Int!
+  stops: Int!
+  cabin: CabinClass!
+}
+
+type Ticket {
+  ticketNumber: String!
+  passengerId: ID!
+  status: TicketStatus!
+  fare: Fare!
+  issuedAt: DateTime!
+  validFrom: Date!
+  validTo: Date
+  coupon: [String!]!
+  exchangeable: Boolean!
+  refundable: Boolean!
+}
+
+type BoardingPass {
+  passengerId: ID!
+  flightNumber: String!
+  date: Date!
+  seat: Seat!
+  boardingGroup: BoardingGroup!
+  gate: Gate!
+  barcode: String!
+  qrCode: String!
+  sequenceNumber: Int!
+  issuedAt: DateTime!
+}
+
+type Checkin {
+  passengerId: ID!
+  flightNumber: String!
+  checkinTime: DateTime!
+  seat: Seat
+  boardingPass: BoardingPass
+  status: CheckinStatus!
+}
+
+# ─────────────────────────────────────────────
+# Baggage
+# ─────────────────────────────────────────────
+
+type BagCheck {
+  tagNumber: String!
+  passengerId: ID!
+  weight: Float!
+  weightUnit: WeightUnit!
+  status: BagStatus!
+  trackedAt: DateTime!
+  location: String
+}
+
+type BaggageAllowance {
+  passengerId: ID!
+  cabin: CabinClass!
+  carryOn: Int!
+  checked: Int!
+  weightLimitKg: Float!
+  overweightFeeUSD: Float!
+  oversizeFeeUSD: Float!
+  mileagePlusOverride: Boolean!
+}
+
+type BaggageTag {
+  tagNumber: String!
+  passengerId: ID!
+  flightNumber: String!
+  destination: Airport!
+  issuedAt: DateTime!
+  bagCheck: BagCheck
+}
+
+type ExcessBaggage {
+  passengerId: ID!
+  quantity: Int!
+  feePerBag: Float!
+  currency: String!
+  totalFee: Float!
+  paidAt: DateTime
+}
+
+# ─────────────────────────────────────────────
+# Fares and Pricing
+# ─────────────────────────────────────────────
+
+type Fare {
+  fareId: ID!
+  origin: String!
+  destination: String!
+  cabin: CabinClass!
+  fareClass: FareClass!
+  baseFare: Float!
+  taxes: Float!
+  fees: Float!
+  totalFare: Float!
+  currency: String!
+  fareBasis: String!
+  validFor: [Date!]
+  rules: FareRules!
+  bundleOptions: [String!]
+}
+
+type FareClass {
+  code: String!
+  cabin: CabinClass!
+  label: String!
+  seatsAvailable: Int!
+  upgradeable: Boolean!
+  basicEconomy: BasicEconomy
+}
+
+type Cabin {
+  cabinClass: CabinClass!
+  name: String!
+  rows: Int!
+  totalSeats: Int!
+  pitchInches: Int
+  widthInches: Float
+  features: [String!]!
+}
+
+type BasicEconomy {
+  seatSelectionFee: Float
+  currency: String
+  carryon: Boolean!
+  changeAllowed: Boolean!
+  refundAllowed: Boolean!
+  upgradeEligible: Boolean!
+  mileageEarningPercent: Int!
+}
+
+type FareRules {
+  fareId: ID!
+  changeAllowed: Boolean!
+  changeFee: Float
+  changeCurrency: String
+  refundable: Boolean!
+  refundPenalty: Float
+  refundCurrency: String
+  advancePurchaseDays: Int
+  minimumStay: String
+  maximumStay: String
+  blackoutDates: [Date!]
+}
+
+type Refund {
+  refundId: ID!
+  ticketNumber: String!
+  amount: Float!
+  currency: String!
+  method: RefundMethod!
+  status: RefundStatus!
+  requestedAt: DateTime!
+  processedAt: DateTime
+  penalty: Float
+}
+
+type Voucher {
+  voucherId: ID!
+  passengerId: ID!
+  amount: Float!
+  currency: String!
+  expiresAt: Date!
+  reason: String
+  status: VoucherStatus!
+  applicableTo: [String!]!
+}
+
+type CancelPenalty {
+  fareId: ID!
+  penaltyAmount: Float!
+  currency: String!
+  waiverEligible: Boolean!
+  waiverConditions: String
+}
+
+type Change {
+  changeId: ID!
+  originalTicket: String!
+  changeType: ChangeType!
+  fee: ExchangeFee!
+  status: ChangeStatus!
+  requestedAt: DateTime!
+  completedAt: DateTime
+}
+
+type ExchangeFee {
+  amount: Float!
+  currency: String!
+  waiverEligible: Boolean!
+  waiverReason: String
+}
+
+# ─────────────────────────────────────────────
+# Passenger
+# ─────────────────────────────────────────────
+
+type Passenger {
+  passengerId: ID!
+  profile: PassengerProfile!
+  frequentFlyer: FrequentFlyer
+  mileagePlus: MileagePlus
+  seatPreference: SeatPreference
+  specialAssistance: [SpecialAssistance!]!
+  knownTravelerNumber: String
+  redressNumber: String
+}
+
+type PassengerProfile {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date
+  gender: String
+  nationality: String
+  passportNumber: String
+  passportExpiry: Date
+  email: String
+  phone: String
+  tsaPrecheck: Boolean!
+  clearEnrolled: Boolean!
+}
+
+# ─────────────────────────────────────────────
+# Loyalty — MileagePlus
+# ─────────────────────────────────────────────
+
+type FrequentFlyer {
+  program: String!
+  memberId: String!
+  status: String
+  alliancePartner: Boolean!
+}
+
+type MileagePlus {
+  memberId: String!
+  firstName: String!
+  lastName: String!
+  status: MileagePlusStatus!
+  points: Points!
+  pqp: PQP!
+  pqf: PQF!
+  pqs: PQS!
+  awards: [Award!]!
+  upgrades: [Upgrade!]!
+  globalServices: GlobalServices
+  loungeAccess: LoungeAccess
+}
+
+type MileagePlusStatus {
+  tier: LoyaltyTier!
+  effectiveFrom: Date!
+  effectiveTo: Date!
+  rolloverPoints: Int!
+  benefits: [String!]!
+}
+
+type Points {
+  balance: Int!
+  pending: Int!
+  redeemable: Int!
+  expiresAt: Date
+  lifetimeEarned: Int!
+}
+
+type Award {
+  awardId: ID!
+  type: AwardType!
+  pointsCost: Int!
+  origin: String
+  destination: String
+  cabin: CabinClass
+  status: AwardStatus!
+  expiresAt: Date
+  bookingId: ID
+}
+
+type PQP {
+  current: Int!
+  required: Int!
+  tier: LoyaltyTier!
+  year: Int!
+}
+
+type PQF {
+  current: Int!
+  required: Int!
+  tier: LoyaltyTier!
+  year: Int!
+}
+
+type PQS {
+  current: Int!
+  required: Int!
+  tier: LoyaltyTier!
+  year: Int!
+}
+
+type Upgrade {
+  upgradeId: ID!
+  passengerId: ID!
+  flightNumber: String!
+  date: Date!
+  fromCabin: CabinClass!
+  toCabin: CabinClass!
+  status: UpgradeStatus!
+  instrument: String
+  requestedAt: DateTime!
+  clearedAt: DateTime
+  listPosition: Int
+}
+
+type GlobalServices {
+  memberId: String!
+  enrolled: Boolean!
+  dedicatedAgent: Boolean!
+  benefits: [String!]!
+}
+
+# ─────────────────────────────────────────────
+# Airport and Infrastructure
+# ─────────────────────────────────────────────
+
+type Airport {
+  iataCode: String!
+  icaoCode: String
+  name: String!
+  city: String!
+  country: String!
+  timezone: String!
+  terminals: [Terminal!]!
+  unitedHub: Boolean!
+  starAllianceHub: Boolean!
+}
+
+type Terminal {
+  terminalId: String!
+  name: String!
+  concourses: [String!]!
+  lounges: [LoungeAccess!]!
+  connectingTime: Int
+}
+
+type InterconnectingFlight {
+  connection: Airport!
+  minimumConnectionTime: Int!
+  recommendedConnectionTime: Int!
+  terminalChange: Boolean!
+  carrierChange: Boolean!
+}
+
+type Codeshare {
+  operatingCarrier: String!
+  operatingFlightNumber: String!
+  marketingCarrier: String!
+  marketingFlightNumber: String!
+  alliance: String
+}
+
+type StarAlliance {
+  member: String!
+  iataCode: String!
+  partnershipLevel: String!
+  mileageEarningAllowed: Boolean!
+  upgradeAllowed: Boolean!
+  loungeAccessAllowed: Boolean!
+}
+
+# ─────────────────────────────────────────────
+# Amenities and Services
+# ─────────────────────────────────────────────
+
+type LoungeAccess {
+  loungeName: String!
+  airport: Airport!
+  terminal: Terminal
+  carrier: String!
+  eligibleTiers: [LoyaltyTier!]!
+  guestPolicy: String
+  hoursOpen: String
+  amenities: [String!]!
+}
+
+type WiFi {
+  available: Boolean!
+  provider: String
+  freeForStatus: [LoyaltyTier!]
+  pricingOptions: [String!]
+  coverage: String
+}
+
+type InFlightEntertainment {
+  available: Boolean!
+  system: String
+  seatbackScreens: Boolean!
+  streamingToDevice: Boolean!
+  channels: Int
+  languages: [String!]!
+}
+
+type MealService {
+  cabin: CabinClass!
+  serviceType: MealType!
+  options: [String!]!
+  specialMealsAvailable: Boolean!
+  preSelectDeadlineHours: Int
+}
+
+type PetPolicy {
+  inCabin: Boolean!
+  asCheckedBaggage: Boolean!
+  inCabinFeeUSD: Float
+  checkedFeeUSD: Float
+  weightLimitKg: Float
+  carrierRequirements: String
+  restrictedBreeds: [String!]
+}
+
+type Wheelchair {
+  passengerId: ID!
+  type: WheelchairType!
+  fromCurbToGate: Boolean!
+  fromGateToSeat: Boolean!
+  ownWheelchair: Boolean!
+  batteryType: String
+}
+
+type SpecialAssistance {
+  passengerId: ID!
+  type: AssistanceType!
+  notes: String
+  confirmedAt: DateTime
+  status: AssistanceStatus!
+}
+
+# ─────────────────────────────────────────────
+# Auth
+# ─────────────────────────────────────────────
+
+type APIKey {
+  keyId: ID!
+  label: String!
+  scopes: [String!]!
+  createdAt: DateTime!
+  expiresAt: DateTime
+  active: Boolean!
+}
+
+type Token {
+  accessToken: String!
+  tokenType: String!
+  expiresIn: Int!
+  scope: String!
+  issuedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────
+
+input BookingInput {
+  itinerary: ItineraryInput!
+  passengers: [PassengerInput!]!
+  fareId: ID!
+  paymentToken: String!
+}
+
+input ItineraryInput {
+  origin: String!
+  destination: String!
+  departureDate: Date!
+  returnDate: Date
+  cabin: CabinClass!
+  passengers: Int!
+}
+
+input PassengerInput {
+  firstName: String!
+  lastName: String!
+  dateOfBirth: Date!
+  mileagePlusNumber: String
+  knownTravelerNumber: String
+}
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum CabinClass {
+  POLARIS_BUSINESS
+  PREMIUM_PLUS
+  ECONOMY_PLUS
+  ECONOMY
+  BASIC_ECONOMY
+}
+
+enum OperationalStatus {
+  ON_TIME
+  DELAYED
+  CANCELLED
+  DIVERTED
+  ARRIVED
+  IN_FLIGHT
+  BOARDING
+  DEPARTED
+}
+
+enum BookingStatus {
+  CONFIRMED
+  ON_HOLD
+  TICKETED
+  CANCELLED
+  REFUNDED
+  WAITLISTED
+}
+
+enum ReservationStatus {
+  OPEN
+  HELD
+  EXPIRED
+  CONFIRMED
+  CANCELLED
+}
+
+enum TicketStatus {
+  OPEN
+  USED
+  REFUNDED
+  EXCHANGED
+  VOIDED
+  LIFTED
+}
+
+enum CheckinStatus {
+  NOT_CHECKED_IN
+  CHECKED_IN
+  BOARDED
+  NO_SHOW
+}
+
+enum BagStatus {
+  CHECKED
+  IN_TRANSIT
+  LOADED
+  ARRIVED
+  CLAIMED
+  DELAYED
+  LOST
+}
+
+enum WeightUnit {
+  KG
+  LB
+}
+
+enum SeatType {
+  WINDOW
+  MIDDLE
+  AISLE
+  BULKHEAD
+  EXIT_ROW
+  LAY_FLAT
+  SUITE
+}
+
+enum WindowAisle {
+  WINDOW
+  AISLE
+  NO_PREFERENCE
+}
+
+enum UpgradeStatus {
+  REQUESTED
+  WAITLISTED
+  CLEARED
+  DENIED
+  EXPIRED
+}
+
+enum LoyaltyTier {
+  GENERAL_MEMBER
+  SILVER
+  GOLD
+  PLATINUM
+  ONE_K
+  GLOBAL_SERVICES
+}
+
+enum AwardType {
+  FLIGHT
+  UPGRADE
+  MERCHANDISE
+  HOTEL
+  CAR
+}
+
+enum AwardStatus {
+  AVAILABLE
+  REDEEMED
+  EXPIRED
+  CANCELLED
+}
+
+enum RefundMethod {
+  ORIGINAL_PAYMENT
+  MILEAGEPLUS_MILES
+  TRAVEL_CERTIFICATE
+  VOUCHER
+}
+
+enum RefundStatus {
+  REQUESTED
+  PROCESSING
+  COMPLETED
+  DENIED
+}
+
+enum VoucherStatus {
+  ACTIVE
+  USED
+  EXPIRED
+  CANCELLED
+}
+
+enum ChangeType {
+  DATE_CHANGE
+  ROUTE_CHANGE
+  CABIN_UPGRADE
+  NAME_CORRECTION
+}
+
+enum ChangeStatus {
+  PENDING
+  COMPLETED
+  DENIED
+  CANCELLED
+}
+
+enum MealType {
+  HOT_MEAL
+  SNACK
+  LIGHT_SNACK
+  BEVERAGE_ONLY
+  NONE
+}
+
+enum AssistanceType {
+  WHEELCHAIR_CURB
+  WHEELCHAIR_GATE
+  BLIND_OR_LOW_VISION
+  DEAF_OR_HARD_OF_HEARING
+  COGNITIVE_ASSISTANCE
+  OXYGEN
+  STRETCHER
+  UNACCOMPANIED_MINOR
+}
+
+enum AssistanceStatus {
+  REQUESTED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum WheelchairType {
+  MANUAL
+  POWER_DRY_CELL
+  POWER_LITHIUM
+  SCOOTER
+}
