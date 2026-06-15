@@ -1,14 +1,8 @@
 # United Airlines (united-airlines)
 
-United Airlines is a major American airline headquartered in Chicago, Illinois, operating one of the world's largest route networks with hubs in Chicago, Denver, Houston, Los Angeles, New York, San Francisco, and Washington, D.C. United provides NDC (New Distribution Capability) APIs for flight shopping, booking, and servicing, enabling travel agencies and corporate booking tools to access continuous pricing, dynamic bundles, and full servicing capabilities.
+United Airlines is a major American airline headquartered in Chicago, Illinois. It operates one of the largest route networks in the world with hubs in Chicago, Denver, Houston, Los Angeles, New York, San Francisco, and Washington, D.C. United provides NDC (New Distribution Capability) APIs for flight shopping, booking, and servicing, as well as corporate travel integration capabilities.
 
-**URL:** [View APIs.json](https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml)
-
-## Scope
-
-- **Type:** Company
-- **Position:** Consuming
-- **Access:** 3rd-Party
+**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml)
 
 ## Tags
 
@@ -22,81 +16,69 @@ United Airlines is a major American airline headquartered in Chicago, Illinois, 
 ## Timestamps
 
 - **Created:** 2026-03-21
-- **Modified:** 2026-05-03
+- **Modified:** 2026-05-19
 
 ## APIs
 
 ### United Airlines NDC API
 
-United Airlines NDC API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights. Features include continuous pricing, dynamic bundled fares (30+ combinations), ancillary products, hold bookings, exchanges, refunds, cancellations, schedule change alerts, and ARC/BSP reporting.
+United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights with full access to continuous pricing, dynamic bundled fares, ancillary products, hold bookings, exchanges, refunds, cancellations, schedule change alerts, and ARC/BSP reporting. Supports 30+ bundle combinations.
 
 - **Human URL:** [https://united.business/NDC-corporate](https://united.business/NDC-corporate)
-- **Base URL:** https://api.united.com/v1
+- **Base URL:** `https://api.united.com/v1`
+
+#### Tags
+
+- Airlines
+- Flight Booking
+- NDC
+- Travel
+- Shopping
+- Booking
+- Servicing
 
 #### Properties
 
-| Type | URL |
-|---|---|
-| Documentation | [https://united.business/NDC-corporate](https://united.business/NDC-corporate) |
-| NDC Capabilities | [https://united.business/NDC-capabilities](https://united.business/NDC-capabilities) |
-| OpenAPI | [united-airlines-ndc-openapi.yml](openapi/united-airlines-ndc-openapi.yml) |
+- [Documentation](https://united.business/NDC-corporate)
+- [N D C  Capabilities](https://united.business/NDC-capabilities)
+- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/openapi/united-airlines-ndc-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
 
 ### United Airlines Flight Status API
 
-Real-time flight status API providing estimated and actual departure/arrival times, gate information, and delay tracking for United-operated flights via the IATA Developer Portal.
+United Airlines Flight Status API providing real-time flight status including estimated and actual departure and arrival times, gate information, delays, and flight tracking for United-operated flights.
 
 - **Human URL:** [https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2](https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2)
+- **Base URL:** `https://api.united.com/v1`
+
+#### Tags
+
+- Airlines
+- Flight Status
+- Real-Time
+- IATA
+
+#### Properties
+
+- [Documentation](https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2)
 
 ## Common Properties
 
-| Type | URL |
-|---|---|
-| Website | [https://www.united.com](https://www.united.com) |
-| Developer Portal | [https://united.business/NDC-corporate](https://united.business/NDC-corporate) |
-| MileagePlus | [https://www.united.com/en/us/fly/mileageplus.html](https://www.united.com/en/us/fly/mileageplus.html) |
-| LinkedIn | [https://www.linkedin.com/company/united-airlines](https://www.linkedin.com/company/united-airlines) |
-| X | [https://twitter.com/united](https://twitter.com/united) |
-
-## Artifacts
-
-### OpenAPI Specifications
-
-- [openapi/united-airlines-ndc-openapi.yml](openapi/united-airlines-ndc-openapi.yml) — NDC API covering shopping, booking, servicing, and flight status (11 operations)
-
-### Spectral Rules
-
-- [rules/united-airlines-rules.yml](rules/united-airlines-rules.yml) — Spectral ruleset enforcing United Airlines API conventions
-
-### Naftiko Capabilities
-
-- [capabilities/flight-booking.yaml](capabilities/flight-booking.yaml) — Unified flight booking and travel management workflow (10 MCP tools)
-- [capabilities/shared/united-airlines-ndc.yaml](capabilities/shared/united-airlines-ndc.yaml) — Shared per-API NDC definition
-
-### JSON Schema
-
-- [json-schema/united-airlines-booking-schema.json](json-schema/united-airlines-booking-schema.json) — Booking/PNR schema
-- [json-schema/united-airlines-flight-status-schema.json](json-schema/united-airlines-flight-status-schema.json) — Flight status schema
-
-### JSON Structure
-
-- [json-structure/united-airlines-booking-structure.json](json-structure/united-airlines-booking-structure.json) — Booking data structure
-
-### JSON-LD Context
-
-- [json-ld/united-airlines-context.jsonld](json-ld/united-airlines-context.jsonld) — Linked data context mapping to schema.org
-
-### Examples
-
-- [examples/united-airlines-searchFlightOffers-example.json](examples/united-airlines-searchFlightOffers-example.json)
-- [examples/united-airlines-createBooking-example.json](examples/united-airlines-createBooking-example.json)
-- [examples/united-airlines-getFlightStatus-example.json](examples/united-airlines-getFlightStatus-example.json)
-
-### Vocabulary
-
-- [vocabulary/united-airlines-vocabulary.yml](vocabulary/united-airlines-vocabulary.yml) — Domain vocabulary (NDC, PNR, MileagePlus, fare types, etc.)
+- [Website](https://www.united.com)
+- [Developer  Portal](https://united.business/NDC-corporate)
+- [N D C  Capabilities](https://united.business/NDC-capabilities)
+- [Contact](https://united.business/contact-form.html)
+- [I A T A  Developer  Portal](https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2)
+- [LinkedIn](https://www.linkedin.com/company/united-airlines)
+- [X (Twitter)](https://twitter.com/united)
+- [Mileage Plus](https://www.united.com/en/us/fly/mileageplus.html)
+- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/openapi/united-airlines-ndc-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Spectral Rules](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/rules/united-airlines-rules.yml)
+- [JSON Schema](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-schema/united-airlines-booking-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-schema/united-airlines-flight-status-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [J S O N L D Context](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-ld/united-airlines-context.jsonld)
+- [Vocabulary](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/vocabulary/united-airlines-vocabulary.yml)
 
 ## Maintainers
 
 **FN:** API Evangelist
-
 **Email:** info@apievangelist.com
