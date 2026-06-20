@@ -8,7 +8,7 @@ description: United Airlines is a major American airline headquartered in Chicag
   Chicago, Denver, Houston, Los Angeles, New York, San Francisco, and Washington,
   D.C. United provides NDC (New Distribution Capability) APIs for flight shopping,
   booking, and servicing, as well as corporate travel integration capabilities.
-image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
 - Airlines
 - Travel
@@ -23,7 +23,7 @@ apis:
     and service United flights with full access to continuous pricing, dynamic bundled
     fares, ancillary products, hold bookings, exchanges, refunds, cancellations, schedule
     change alerts, and ARC/BSP reporting. Supports 30+ bundle combinations.
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://united.business/NDC-corporate
   baseURL: https://api.united.com/v1
   tags:
@@ -50,7 +50,7 @@ apis:
   description: United Airlines Flight Status API providing real-time flight status
     including estimated and actual departure and arrival times, gate information,
     delays, and flight tracking for United-operated flights.
-  image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
   baseURL: https://api.united.com/v1
   tags:
