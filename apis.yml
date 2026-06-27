@@ -64,7 +64,7 @@ apis:
 common:
 - type: Website
   url: https://www.united.com
-- type: Developer Portal
+- type: DeveloperPortal
   url: https://united.business/NDC-corporate
 - type: NDC Capabilities
   url: https://united.business/NDC-capabilities
