@@ -62,6 +62,10 @@ apis:
   - type: Documentation
     url: https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
 common:
+- type: Authentication
+  url: authentication/united-airlines-authentication.yml
+- type: OAuthScopes
+  url: scopes/united-airlines-scopes.yml
 - type: Website
   url: https://www.united.com
 - type: DeveloperPortal

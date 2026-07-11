@@ -1,0 +1,22 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/united-airlines-ndc-openapi.yml
+schemes:
+- name: OAuth2
+  source: openapi/united-airlines-ndc-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api.united.com/v1/oauth/token
+scopes:
+- scope: booking
+  description: Full booking and servicing access
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/united-airlines-ndc-openapi.yml
+- scope: read
+  description: Read-only access to flight data
+  flows:
+  - clientCredentials
+  sources:
+  - openapi/united-airlines-ndc-openapi.yml
