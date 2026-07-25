@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: United Airlines NDC Booking Servicing API
+  description: United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights. The API provides access to continuous pricing, dynamic bundled fares (30+ product combinations), ancillary products, hold bookings, exchanges, refunds, cancellations, automatic waiver application, and ARC/BSP reporting. Compliant with IATA NDC standards.
+  version: 1.0.0
+  contact:
+    name: United Airlines NDC Support
+    email: ndcagency@united.com
+    url: https://united.business/NDC-corporate
+  termsOfService: https://united.business/NDC-corporate
+servers:
+- url: https://api.united.com/v1
+  description: United Airlines NDC Production API
+tags:
+- name: Servicing
+  description: Post-booking modifications, refunds, and ancillaries
+paths:
+  /bookings/{bookingId}:
+    delete:
+      operationId: cancelBooking
+      summary: Cancel Booking
+      description: Cancel an existing booking. Applies automatic waivers during operational disruptions.
+      tags:
+      - Servicing
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique booking identifier
+      responses:
+        '200':
+          description: Booking cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancellationResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+  /bookings/{bookingId}/exchange:
+    post:
+      operationId: exchangeBooking
+      summary: Exchange Booking
+      description: Modify an existing booking by exchanging flights. Supports changes, multi-option flight displays for rebooking, and exchange of held bookings.
+      tags:
+      - Servicing
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique booking identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExchangeRequest'
+      responses:
+        '200':
+          description: Booking exchange completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+  /bookings/{bookingId}/refund:
+    post:
+      operationId: refundBooking
+      summary: Refund Booking
+      description: Process a refund for a cancelled or eligible booking.
+      tags:
+      - Servicing
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique booking identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '200':
+          description: Refund processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+  /bookings/{bookingId}/ancillaries:
+    post:
+      operationId: addAncillary
+      summary: Add Ancillary Service
+      description: Add ancillary products and services (seats, bags, upgrades) to an existing booking.
+      tags:
+      - Servicing
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique booking identifier
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AncillaryRequest'
+      responses:
+        '200':
+          description: Ancillary service added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.united.com/v1/oauth/token
+          scopes:
+            read: Read-only access to flight data
+            booking: Full booking and servicing access

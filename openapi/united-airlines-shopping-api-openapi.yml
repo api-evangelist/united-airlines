@@ -1,0 +1,121 @@
+openapi: 3.1.0
+info:
+  title: United Airlines NDC Booking Shopping API
+  description: United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights. The API provides access to continuous pricing, dynamic bundled fares (30+ product combinations), ancillary products, hold bookings, exchanges, refunds, cancellations, automatic waiver application, and ARC/BSP reporting. Compliant with IATA NDC standards.
+  version: 1.0.0
+  contact:
+    name: United Airlines NDC Support
+    email: ndcagency@united.com
+    url: https://united.business/NDC-corporate
+  termsOfService: https://united.business/NDC-corporate
+servers:
+- url: https://api.united.com/v1
+  description: United Airlines NDC Production API
+tags:
+- name: Shopping
+  description: Flight search and pricing operations
+paths:
+  /shopping/offers:
+    post:
+      operationId: searchFlightOffers
+      summary: Search Flight Offers
+      description: Search for available United Airlines flights with continuous pricing. Returns flight offers including Basic Economy, standard fares, and dynamic bundled fares with ancillary combinations.
+      tags:
+      - Shopping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FlightSearchRequest'
+      responses:
+        '200':
+          description: Flight offers returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightOffersResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - OAuth2:
+        - booking
+  /shopping/offers/{offerId}:
+    get:
+      operationId: getFlightOffer
+      summary: Get Flight Offer Details
+      description: Retrieve detailed pricing and availability for a specific flight offer.
+      tags:
+      - Shopping
+      parameters:
+      - name: offerId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the flight offer
+      responses:
+        '200':
+          description: Flight offer details returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightOffer'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+components:
+  responses:
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.united.com/v1/oauth/token
+          scopes:
+            read: Read-only access to flight data
+            booking: Full booking and servicing access

@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: United Airlines NDC Booking Status API
+  description: United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights. The API provides access to continuous pricing, dynamic bundled fares (30+ product combinations), ancillary products, hold bookings, exchanges, refunds, cancellations, automatic waiver application, and ARC/BSP reporting. Compliant with IATA NDC standards.
+  version: 1.0.0
+  contact:
+    name: United Airlines NDC Support
+    email: ndcagency@united.com
+    url: https://united.business/NDC-corporate
+  termsOfService: https://united.business/NDC-corporate
+servers:
+- url: https://api.united.com/v1
+  description: United Airlines NDC Production API
+tags:
+- name: Status
+  description: Flight status and schedule information
+paths:
+  /flights/status:
+    get:
+      operationId: getFlightStatus
+      summary: Get Flight Status
+      description: Retrieve real-time flight status including estimated and actual departure and arrival times, gate information, and delays.
+      tags:
+      - Status
+      parameters:
+      - name: flightNumber
+        in: query
+        required: true
+        schema:
+          type: string
+        description: United Airlines flight number (e.g., UA123)
+      - name: date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+        description: Flight date (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Flight status returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlightStatus'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - read
+  /flights/schedules:
+    get:
+      operationId: getFlightSchedules
+      summary: Get Flight Schedules
+      description: Retrieve United Airlines flight schedules for a given origin-destination pair and date range.
+      tags:
+      - Status
+      parameters:
+      - name: origin
+        in: query
+        required: true
+        schema:
+          type: string
+        description: IATA airport code for origin (e.g., ORD)
+      - name: destination
+        in: query
+        required: true
+        schema:
+          type: string
+        description: IATA airport code for destination (e.g., LAX)
+      - name: startDate
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+        description: Start date for schedule query (YYYY-MM-DD)
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: date
+        description: End date for schedule query (YYYY-MM-DD)
+      responses:
+        '200':
+          description: Flight schedules returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FlightSchedule'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - read
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.united.com/v1/oauth/token
+          scopes:
+            read: Read-only access to flight data
+            booking: Full booking and servicing access

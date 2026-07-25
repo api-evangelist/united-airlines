@@ -1,0 +1,157 @@
+openapi: 3.1.0
+info:
+  title: United Airlines NDC Booking API
+  description: United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights. The API provides access to continuous pricing, dynamic bundled fares (30+ product combinations), ancillary products, hold bookings, exchanges, refunds, cancellations, automatic waiver application, and ARC/BSP reporting. Compliant with IATA NDC standards.
+  version: 1.0.0
+  contact:
+    name: United Airlines NDC Support
+    email: ndcagency@united.com
+    url: https://united.business/NDC-corporate
+  termsOfService: https://united.business/NDC-corporate
+servers:
+- url: https://api.united.com/v1
+  description: United Airlines NDC Production API
+tags:
+- name: Booking
+  description: Flight booking and reservation management
+paths:
+  /bookings:
+    post:
+      operationId: createBooking
+      summary: Create Booking
+      description: Create a new flight booking using a selected offer. Supports hold bookings (fare-dependent), credit card payment with two-factor authentication, and unused ticket application as payment.
+      tags:
+      - Booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+      security:
+      - OAuth2:
+        - booking
+    get:
+      operationId: listBookings
+      summary: List Bookings
+      description: Retrieve a list of bookings for the agency or traveler account.
+      tags:
+      - Booking
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - confirmed
+          - held
+          - cancelled
+        description: Filter bookings by status
+      - name: departureDate
+        in: query
+        schema:
+          type: string
+          format: date
+        description: Filter by departure date (YYYY-MM-DD)
+      responses:
+        '200':
+          description: List of bookings returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BookingResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+  /bookings/{bookingId}:
+    get:
+      operationId: getBooking
+      summary: Get Booking
+      description: Retrieve details of a specific booking by its ID.
+      tags:
+      - Booking
+      parameters:
+      - name: bookingId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique booking identifier (PNR/record locator)
+      responses:
+        '200':
+          description: Booking details returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      security:
+      - OAuth2:
+        - booking
+components:
+  responses:
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.united.com/v1/oauth/token
+          scopes:
+            read: Read-only access to flight data
+            booking: Full booking and servicing access
