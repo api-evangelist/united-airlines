@@ -1,5 +1,18 @@
 aid: united-airlines
 url: https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml
+accessModel:
+  pricing: enterprise
+  onboarding: approval
+  trial: false
+  try_now: false
+  public: false
+  label: Enterprise · Requires approval
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 created: '2026-03-21'
 modified: '2026-05-19'
 name: United Airlines
@@ -8,7 +21,7 @@ description: United Airlines is a major American airline headquartered in Chicag
   Chicago, Denver, Houston, Los Angeles, New York, San Francisco, and Washington,
   D.C. United provides NDC (New Distribution Capability) APIs for flight shopping,
   booking, and servicing, as well as corporate travel integration capabilities.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/united-airlines.png
 tags:
 - Airlines
 - Travel
@@ -17,41 +30,13 @@ tags:
 - Loyalty
 - Fortune 100
 apis:
-- name: United Airlines NDC API
-  description: United Airlines NDC (New Distribution Capability) API enables travel
-    agencies, online booking tools, and corporate travel platforms to search, book,
-    and service United flights with full access to continuous pricing, dynamic bundled
-    fares, ancillary products, hold bookings, exchanges, refunds, cancellations, schedule
-    change alerts, and ARC/BSP reporting. Supports 30+ bundle combinations.
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://united.business/NDC-corporate
-  baseURL: https://api.united.com/v1
-  tags:
-  - Airlines
-  - Flight Booking
-  - NDC
-  - Travel
-  - Shopping
-  - Booking
-  - Servicing
-  properties:
-  - type: Documentation
-    url: https://united.business/NDC-corporate
-  - type: NDC Capabilities
-    url: https://united.business/NDC-capabilities
-  - type: OpenAPI
-    url: https://raw.githubusercontent.com/api-evangelist/united-airlines/main/openapi/united-airlines-ndc-openapi.yml
-  - url: graphql/united-airlines-graphql.md
-    type: GraphQL
-  contact:
-  - FN: United Airlines NDC Support
-    email: ndcagency@united.com
 - name: United Airlines Flight Status API
-  description: United Airlines Flight Status API providing real-time flight status
-    including estimated and actual departure and arrival times, gate information,
-    delays, and flight tracking for United-operated flights.
+  description: >-
+    United Airlines Flight Status API providing real-time flight status including estimated and actual
+    departure and arrival times, gate information, delays, and flight tracking for United-operated flights.
   image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
+  humanURL: >-
+    https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
   baseURL: https://api.united.com/v1
   tags:
   - Airlines
@@ -60,7 +45,72 @@ apis:
   - IATA
   properties:
   - type: Documentation
-    url: https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
+    url: >-
+      https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2
+- aid: united-airlines:united-airlines-booking-api
+  name: United Airlines Booking API
+  description: Flight booking and reservation management
+  humanURL: https://united.business/NDC-corporate
+  baseURL: https://api.united.com/v1
+  tags:
+  - Booking
+  properties:
+  - type: OpenAPI
+    url: openapi/united-airlines-booking-api-openapi.yml
+  - type: Documentation
+    url: https://united.business/NDC-corporate
+  - type: NDC Capabilities
+    url: https://united.business/NDC-capabilities
+  - type: GraphQL
+    url: graphql/united-airlines-graphql.md
+- aid: united-airlines:united-airlines-servicing-api
+  name: United Airlines Servicing API
+  description: Post-booking modifications, refunds, and ancillaries
+  humanURL: https://united.business/NDC-corporate
+  baseURL: https://api.united.com/v1
+  tags:
+  - Servicing
+  properties:
+  - type: OpenAPI
+    url: openapi/united-airlines-servicing-api-openapi.yml
+  - type: Documentation
+    url: https://united.business/NDC-corporate
+  - type: NDC Capabilities
+    url: https://united.business/NDC-capabilities
+  - type: GraphQL
+    url: graphql/united-airlines-graphql.md
+- aid: united-airlines:united-airlines-shopping-api
+  name: United Airlines Shopping API
+  description: Flight search and pricing operations
+  humanURL: https://united.business/NDC-corporate
+  baseURL: https://api.united.com/v1
+  tags:
+  - Shopping
+  properties:
+  - type: OpenAPI
+    url: openapi/united-airlines-shopping-api-openapi.yml
+  - type: Documentation
+    url: https://united.business/NDC-corporate
+  - type: NDC Capabilities
+    url: https://united.business/NDC-capabilities
+  - type: GraphQL
+    url: graphql/united-airlines-graphql.md
+- aid: united-airlines:united-airlines-status-api
+  name: United Airlines Status API
+  description: Flight status and schedule information
+  humanURL: https://united.business/NDC-corporate
+  baseURL: https://api.united.com/v1
+  tags:
+  - Status
+  properties:
+  - type: OpenAPI
+    url: openapi/united-airlines-status-api-openapi.yml
+  - type: Documentation
+    url: https://united.business/NDC-corporate
+  - type: NDC Capabilities
+    url: https://united.business/NDC-capabilities
+  - type: GraphQL
+    url: graphql/united-airlines-graphql.md
 common:
 - type: AgenticAccess
   url: agentic-access/united-airlines-agentic-access.yml
