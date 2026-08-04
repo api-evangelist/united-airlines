@@ -1,0 +1,34 @@
+{
+  "provider": "united-airlines",
+  "sources": [
+    "united-airlines-booking-api-openapi.yml",
+    "united-airlines-servicing-api-openapi.yml",
+    "united-airlines-shopping-api-openapi.yml",
+    "united-airlines-status-api-openapi.yml"
+  ],
+  "outputs": [
+    "united-airlines-booking-api-openapi.yml",
+    "united-airlines-servicing-api-openapi.yml",
+    "united-airlines-shopping-api-openapi.yml",
+    "united-airlines-status-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [
+    "united-airlines-booking-api-openapi.yml: dangling $ref: #/components/schemas/BookingRequest",
+    "united-airlines-booking-api-openapi.yml: dangling $ref: #/components/schemas/BookingResponse",
+    "united-airlines-servicing-api-openapi.yml: dangling $ref: #/components/schemas/AncillaryRequest",
+    "united-airlines-servicing-api-openapi.yml: dangling $ref: #/components/schemas/BookingResponse",
+    "united-airlines-servicing-api-openapi.yml: dangling $ref: #/components/schemas/CancellationResponse",
+    "united-airlines-servicing-api-openapi.yml: dangling $ref: #/components/schemas/ExchangeRequest",
+    "united-airlines-servicing-api-openapi.yml: dangling $ref: #/components/schemas/RefundRequest",
+    "united-airlines-servicing-api-openapi.yml: dangling $ref: #/components/schemas/RefundResponse",
+    "united-airlines-shopping-api-openapi.yml: dangling $ref: #/components/schemas/FlightOffer",
+    "united-airlines-shopping-api-openapi.yml: dangling $ref: #/components/schemas/FlightOffersResponse",
+    "united-airlines-shopping-api-openapi.yml: dangling $ref: #/components/schemas/FlightSearchRequest",
+    "united-airlines-status-api-openapi.yml: dangling $ref: #/components/schemas/FlightSchedule",
+    "united-airlines-status-api-openapi.yml: dangling $ref: #/components/schemas/FlightStatus"
+  ],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
