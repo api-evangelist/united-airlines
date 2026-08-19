@@ -1,5 +1,6 @@
 aid: united-airlines
 url: https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml
+specificationVersion: '0.23'
 accessModel:
   pricing: enterprise
   onboarding: approval
