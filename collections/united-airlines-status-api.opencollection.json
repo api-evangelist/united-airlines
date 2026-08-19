@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "United Airlines NDC Booking Status API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Flight Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.united.com/v1/flights/status",
+            "params": [
+              {
+                "name": "flightNumber",
+                "value": "",
+                "type": "query",
+                "description": "United Airlines flight number (e.g., UA123)"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Flight date (YYYY-MM-DD)"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve real-time flight status including estimated and actual departure and arrival times, gate information, and delays."
+        },
+        {
+          "info": {
+            "name": "Get Flight Schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.united.com/v1/flights/schedules",
+            "params": [
+              {
+                "name": "origin",
+                "value": "",
+                "type": "query",
+                "description": "IATA airport code for origin (e.g., ORD)"
+              },
+              {
+                "name": "destination",
+                "value": "",
+                "type": "query",
+                "description": "IATA airport code for destination (e.g., LAX)"
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Start date for schedule query (YYYY-MM-DD)"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "End date for schedule query (YYYY-MM-DD)"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve United Airlines flight schedules for a given origin-destination pair and date range."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,142 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "United Airlines NDC Booking Servicing API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Servicing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Cancel Booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.united.com/v1/bookings/:bookingId",
+            "params": [
+              {
+                "name": "bookingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique booking identifier"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Cancel an existing booking. Applies automatic waivers during operational disruptions."
+        },
+        {
+          "info": {
+            "name": "Exchange Booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.united.com/v1/bookings/:bookingId/exchange",
+            "params": [
+              {
+                "name": "bookingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique booking identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Modify an existing booking by exchanging flights. Supports changes, multi-option flight displays for rebooking, and exchange of held bookings."
+        },
+        {
+          "info": {
+            "name": "Refund Booking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.united.com/v1/bookings/:bookingId/refund",
+            "params": [
+              {
+                "name": "bookingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique booking identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Process a refund for a cancelled or eligible booking."
+        },
+        {
+          "info": {
+            "name": "Add Ancillary Service",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.united.com/v1/bookings/:bookingId/ancillaries",
+            "params": [
+              {
+                "name": "bookingId",
+                "value": "",
+                "type": "path",
+                "description": "Unique booking identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Add ancillary products and services (seats, bags, upgrades) to an existing booking."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

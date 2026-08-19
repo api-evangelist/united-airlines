@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "United Airlines NDC Booking Shopping API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Shopping",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Flight Offers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.united.com/v1/shopping/offers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Search for available United Airlines flights with continuous pricing. Returns flight offers including Basic Economy, standard fares, and dynamic bundled fares with ancillary combinations."
+        },
+        {
+          "info": {
+            "name": "Get Flight Offer Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.united.com/v1/shopping/offers/:offerId",
+            "params": [
+              {
+                "name": "offerId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the flight offer"
+              }
+            ],
+            "auth": {
+              "type": "oauth2",
+              "flow": "client_credentials",
+              "accessTokenUrl": "https://api.united.com/v1/oauth/token",
+              "credentials": {
+                "clientId": "{{clientId}}",
+                "clientSecret": "{{clientSecret}}"
+              }
+            }
+          },
+          "docs": "Retrieve detailed pricing and availability for a specific flight offer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
