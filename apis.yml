@@ -124,6 +124,9 @@ apis:
   - type: GraphQL
     url: graphql/united-airlines-graphql.md
 common:
+- type: CapabilityMap
+  url: capabilities/united-airlines-capability-edges.yml
+  name: United Airlines Business Capability Map
 - type: AgenticAccess
   url: agentic-access/united-airlines-agentic-access.yml
 - type: DomainSecurity

@@ -1,0 +1,38 @@
+slug: united-airlines
+provider: United Airlines
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Booking
+  spec_file: united-airlines-booking-api-openapi.yml
+  capability_id: BC-2400.40
+  capability_id_l1: BC-2400
+  capability_name: Booking and Reservation Management
+  confidence: 0.9
+  evidence: 'POST /bookings createBooking Create Booking; GET /bookings listBookings; description: ''enables
+    travel agencies, online booking tools, and corporate travel platforms to search, book, and service
+    United flights ... hold bookings, exchanges, refunds, cancellations'''
+  reason: Operations create and retrieve flight bookings against published schedules and fares under IATA
+    NDC — plainly acceptance and management of capacity reservations. Booking and Reservation Management
+    is the direct fit.
+- tag: Servicing
+  spec_file: united-airlines-servicing-api-openapi.yml
+  capability_id: BC-2400.40
+  capability_id_l1: BC-2400
+  capability_name: Booking and Reservation Management
+  confidence: 0.72
+  evidence: DELETE /bookings/{bookingId} cancelBooking Cancel Booking; POST /bookings/{bookingId}/exchange
+    Exchange Booking; POST /bookings/{bookingId}/ancillaries Add Ancillary Service
+  reason: Post-sale servicing of air bookings — cancellation, exchange, refund and ancillary addition
+    against sold seat capacity. In this frame the closest fit is booking and reservation management within
+    capacity sale; the refund element leans towards billing but the dominant surface is booking modification/cancellation.
