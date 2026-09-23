@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: United Airlines NDC Booking Shopping API
+  title: United Airlines NDC Shopping API
   description: United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights. The API provides access to continuous pricing, dynamic bundled fares (30+ product combinations), ancillary products, hold bookings, exchanges, refunds, cancellations, automatic waiver application, and ARC/BSP reporting. Compliant with IATA NDC standards.
   version: 1.0.0
   contact:
@@ -74,14 +74,8 @@ paths:
         - booking
 components:
   responses:
-    Unauthorized:
-      description: Authentication required or failed
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -92,8 +86,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal server error
+    Unauthorized:
+      description: Authentication required or failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
