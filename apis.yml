@@ -73,8 +73,6 @@ apis:
     url: https://united.business/NDC-corporate
   - type: NDC Capabilities
     url: https://united.business/NDC-capabilities
-  - type: GraphQL
-    url: graphql/united-airlines-graphql.md
 - aid: united-airlines:united-airlines-servicing-api
   name: United Airlines Servicing API
   description: Post-booking modifications, refunds, and ancillaries
@@ -89,8 +87,6 @@ apis:
     url: https://united.business/NDC-corporate
   - type: NDC Capabilities
     url: https://united.business/NDC-capabilities
-  - type: GraphQL
-    url: graphql/united-airlines-graphql.md
 - aid: united-airlines:united-airlines-shopping-api
   name: United Airlines Shopping API
   description: Flight search and pricing operations
@@ -105,8 +101,6 @@ apis:
     url: https://united.business/NDC-corporate
   - type: NDC Capabilities
     url: https://united.business/NDC-capabilities
-  - type: GraphQL
-    url: graphql/united-airlines-graphql.md
 - aid: united-airlines:united-airlines-status-api
   name: United Airlines Status API
   description: Flight status and schedule information
@@ -121,8 +115,6 @@ apis:
     url: https://united.business/NDC-corporate
   - type: NDC Capabilities
     url: https://united.business/NDC-capabilities
-  - type: GraphQL
-    url: graphql/united-airlines-graphql.md
 common:
 - type: CapabilityMap
   url: capabilities/united-airlines-capability-edges.yml
