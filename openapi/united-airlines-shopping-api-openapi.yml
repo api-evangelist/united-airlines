@@ -74,14 +74,14 @@ paths:
         - booking
 components:
   responses:
-    InternalServerError:
-      description: Internal server error
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request parameters
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:
@@ -92,8 +92,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
+    BadRequest:
+      description: Invalid request parameters
       content:
         application/json:
           schema:
