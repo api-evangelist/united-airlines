@@ -147,14 +147,14 @@ paths:
         - booking
 components:
   responses:
-    Unauthorized:
-      description: Authentication required or failed
+    BadRequest:
+      description: Invalid request parameters
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Invalid request parameters
+    Unauthorized:
+      description: Authentication required or failed
       content:
         application/json:
           schema:
