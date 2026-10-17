@@ -74,12 +74,6 @@ paths:
         - booking
 components:
   responses:
-    BadRequest:
-      description: Invalid request parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -88,6 +82,12 @@ components:
             $ref: '#/components/schemas/Error'
     InternalServerError:
       description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Invalid request parameters
       content:
         application/json:
           schema:
