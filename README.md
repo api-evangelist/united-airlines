@@ -1,4 +1,4 @@
-# United Airlines (united-airlines)
+# United Airlines
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,83 +66,171 @@
 
 United Airlines is a major American airline headquartered in Chicago, Illinois. It operates one of the largest route networks in the world with hubs in Chicago, Denver, Houston, Los Angeles, New York, San Francisco, and Washington, D.C. United provides NDC (New Distribution Capability) APIs for flight shopping, booking, and servicing, as well as corporate travel integration capabilities.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/united-airlines/refs/heads/main/apis.yml)
+**Areas:** Airlines · Travel · Flight Booking · NDC · Loyalty · Fortune 100 · Aviation
 
-## Tags
+## United Airlines on APIs.io
 
-- Airlines
-- Travel
-- Flight Booking
-- NDC
-- Loyalty
-- Fortune 100
+Everything profiled for United Airlines is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/united-airlines/](https://apis.io/providers/united-airlines/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (5)
 
-- **Created:** 2026-03-21
-- **Modified:** 2026-05-19
+- [United Airlines Flight Status API](https://apis.io/apis/united-airlines/united-airlines-flight-status-api/) — United Airlines Flight Status API providing real-time flight status including estimated and actual departure and arrival times, gate information, delays,…
+- [United Airlines Booking API](https://apis.io/apis/united-airlines/united-airlines-booking-api/) — Flight booking and reservation management
+- [United Airlines Servicing API](https://apis.io/apis/united-airlines/united-airlines-servicing-api/) — Post-booking modifications, refunds, and ancillaries
+- [United Airlines Shopping API](https://apis.io/apis/united-airlines/united-airlines-shopping-api/) — Flight search and pricing operations
+- [United Airlines Status API](https://apis.io/apis/united-airlines/united-airlines-status-api/) — Flight status and schedule information
 
-## APIs
+### Published properties
 
-### United Airlines NDC API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-United Airlines NDC (New Distribution Capability) API enables travel agencies, online booking tools, and corporate travel platforms to search, book, and service United flights with full access to continuous pricing, dynamic bundled fares, ancillary products, hold bookings, exchanges, refunds, cancellations, schedule change alerts, and ARC/BSP reporting. Supports 30+ bundle combinations.
+#### GraphQL (1)
 
-- **Human URL:** [https://united.business/NDC-corporate](https://united.business/NDC-corporate)
-- **Base URL:** `https://api.united.com/v1`
+GraphQL schemas.
 
-#### Tags
+- [Moved to /providers/united-airlines/](https://apis.io/graphqls/united-airlines/united-airlines-graphql/)
 
-- Airlines
-- Flight Booking
-- NDC
-- Travel
-- Shopping
-- Booking
-- Servicing
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Documentation](https://united.business/NDC-corporate)
-- [N D C  Capabilities](https://united.business/NDC-capabilities)
-- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/openapi/united-airlines-ndc-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [United Airlines Agentic Access](https://apis.io/agentic-access/united-airlines/united-airlines-agentic-access/)
 
-### United Airlines Flight Status API
+#### JSON Schema (2)
 
-United Airlines Flight Status API providing real-time flight status including estimated and actual departure and arrival times, gate information, delays, and flight tracking for United-operated flights.
+The data models the API reads and writes.
 
-- **Human URL:** [https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2](https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2)
-- **Base URL:** `https://api.united.com/v1`
+- [United Airlines Booking](https://apis.io/schemas/united-airlines/united-airlines-booking/)
+- [United Airlines Flight Status](https://apis.io/schemas/united-airlines/united-airlines-flight-status/)
 
-#### Tags
+#### JSON Structure (1)
 
-- Airlines
-- Flight Status
-- Real-Time
-- IATA
+Data models expressed in JSON Structure.
 
-#### Properties
+- [United Airlines Booking Structure](https://apis.io/json-structure/united-airlines/united-airlines-booking-structure/)
 
-- [Documentation](https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2)
+#### JSON-LD (1)
 
-## Common Properties
+Linked-data contexts for the provider's vocabulary.
+
+- [United Airlines Context](https://apis.io/jsonld/united-airlines/united-airlines-context/)
+
+#### Vocabulary (1)
+
+The provider's domain terms, defined.
+
+- [United Airlines API Vocabulary](https://apis.io/vocabularies/united-airlines/united-airlines-vocabulary/)
+
+#### Examples (3)
+
+Example requests and responses.
+
+- [United Airlines Createbooking Example](https://apis.io/examples/united-airlines/united-airlines-createBooking-example/)
+- [United Airlines Getflightstatus Example](https://apis.io/examples/united-airlines/united-airlines-getFlightStatus-example/)
+- [United Airlines Searchflightoffers Example](https://apis.io/examples/united-airlines/united-airlines-searchFlightOffers-example/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [United Airlines NDC Booking API](https://apis.io/collections/united-airlines/open-united-airlines-booking-api/)
+- [United Airlines NDC Booking Servicing API](https://apis.io/collections/united-airlines/open-united-airlines-servicing-api/)
+- [United Airlines NDC Booking Shopping API](https://apis.io/collections/united-airlines/open-united-airlines-shopping-api/)
+- [United Airlines NDC Booking Status API](https://apis.io/collections/united-airlines/open-united-airlines-status-api/)
+
+#### Governance rules (2)
+
+Spectral rulesets for the provider's contracts.
+
+- [United Airlines — jsonschema rules](https://apis.io/rules/united-airlines/united-airlines-jsonschema-spectral-rules/)
+- [United Airlines API Rules](https://apis.io/rules/united-airlines/united-airlines-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [United Airlines Authentication](https://apis.io/security/united-airlines/united-airlines-authentication/)
+- [United Airlines Domain Security](https://apis.io/security/united-airlines/united-airlines-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [United Airlines Scopes](https://apis.io/scopes/united-airlines/united-airlines-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [United Airlines Plans Pricing](https://apis.io/plans/united-airlines/united-airlines-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [United Airlines Rate Limits](https://apis.io/rate-limits/united-airlines/united-airlines-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [United Airlines Finops](https://apis.io/finops/united-airlines/united-airlines-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.united.com)
-- [Developer  Portal](https://united.business/NDC-corporate)
-- [N D C  Capabilities](https://united.business/NDC-capabilities)
-- [Contact](https://united.business/contact-form.html)
-- [I A T A  Developer  Portal](https://api.developer.iata.org/united-airlines-united-airlines-default/api/flight-status2)
-- [LinkedIn](https://www.linkedin.com/company/united-airlines)
-- [X (Twitter)](https://twitter.com/united)
-- [Mileage Plus](https://www.united.com/en/us/fly/mileageplus.html)
-- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/openapi/united-airlines-ndc-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Spectral Rules](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/rules/united-airlines-rules.yml)
-- [JSON Schema](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-schema/united-airlines-booking-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-schema/united-airlines-flight-status-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [J S O N L D Context](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/json-ld/united-airlines-context.jsonld)
-- [Vocabulary](https://raw.githubusercontent.com/api-evangelist/united-airlines/main/vocabulary/united-airlines-vocabulary.yml)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** API Evangelist
-**Email:** info@apievangelist.com
+**Kin Score 33.1** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 56.9 |
+| Contract governance | 27.3 |
+| Operational transparency | 5.3 |
+| Developer ergonomics | 31.0 |
+| Access clarity | 5.3 |
+
+**Agent readiness 22.5** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | negotiable (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 26.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/united-airlines/](https://apis.io/providers/united-airlines/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for United Airlines: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/united-airlines/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
